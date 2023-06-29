@@ -16,12 +16,12 @@
 			</p>
 
 			<!-- Content -->
-			<form>
+			<form method="POST">
 				<section class="container">
 					<section class="category">
 						<p>Upload the file containing the balance sheet:</p>
 						<row>
-							<input id="file-control" type="file" hidden="true">
+							<input id="file-control" type="file" hidden="true" enctype="multipart/form-data">
 							<div id="file-name" for="file-control" class="field">No file selected</div>
 							<button id="button-browse" onclick="browseForFile()">Browse</button>
 						</row>
