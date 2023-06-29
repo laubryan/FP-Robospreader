@@ -2,6 +2,10 @@ from flask import Flask, request, render_template, redirect
 
 app = Flask(__name__)
 
+# App Configuration
+app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024 # 10 MB
+app.config["UPLOAD_EXTENSIONS"] = [".pdf"]
+
 # Global Definitions
 _globalDefs = {
     "appname": "RoboSpreader"
