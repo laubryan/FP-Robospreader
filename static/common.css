@@ -1,0 +1,86 @@
+/*
+	Common Styles
+*/
+a:link {
+	color: unset;
+	text-decoration: none;
+}
+a:visited {
+	color: unset;
+	text-decoration: none;
+}
+a:hover {
+	color: orange;
+}
+a h1:hover {
+	color: orange;
+}
+
+body {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.breadcrumbs {
+	margin: 0.5rem 0.5rem 0 1rem;
+}
+.breadcrumbs a {
+	text-decoration: none;
+}
+
+button {
+	border-radius: 0.2rem;
+	border: 1px solid gray;
+	margin: 0 0.5rem 0 0.5rem;
+	padding: 0.4rem 2rem 0.4rem 2rem;
+}
+button:hover {
+	border-radius: 0.2rem;
+	border: 1px solid orange;
+	transform: scale(1.1);
+}
+
+#button-next {
+	float: right;
+}
+
+.category {
+	border: 1px solid #a0a0a0;
+	border-radius: 0.5rem;
+	box-shadow: 4px 4px 3px #aaa5;
+	margin: 0.3rem 0.3rem 0.8rem 0.3rem;
+	padding: 0.8rem;
+}
+
+.container {
+	padding: 0.6rem;
+}
+
+.field {
+	border: 1px solid gray;
+	border-radius: 0.2rem;
+	padding: 0.3rem 1rem 0.3rem 0.7rem;
+	width: 23em;
+}
+
+h1 {
+	background-color: gray;
+	border-radius: 0.3rem 0.3rem 0 0;
+	color: white;
+	margin: 0;
+	padding: 0.5rem 1rem 0.5rem 1rem;
+}
+
+h1 img {
+	padding-right: 1rem;
+	width: 3rem;
+	vertical-align: middle;
+}
+
+label:disabled {
+	color: gray;
+}
+
+row {
+	display: flex;
+	margin: 1rem 0 1rem 0;
+}

@@ -1,0 +1,50 @@
+/*
+	Test Styles
+*/
+
+html, body {
+	font-family: Arial, Helvetica, sans-serif
+}
+
+h2 {
+	margin-bottom: 0.2rem;
+}
+
+table {
+	border-collapse: collapse;
+	margin: 0 0 1rem 0;
+	min-width: 43rem;
+}
+
+table thead, tfoot {
+	background: black;
+	color: white;
+}
+
+table tfoot th {
+	font-size: 0.9em;
+	font-weight: normal;
+	text-align: right;
+}
+
+table th {
+	padding: 0.5rem 1rem 0.5rem 1rem;
+}
+
+table td {
+	background-color: white;
+  border: solid 1px black;
+	color: black;
+	padding: 0.5rem;
+}
+
+/* Cells with status text */
+.cell-status {
+	padding: 1rem;
+	text-align: center;
+}
+
+/* Cells with values */
+.cell-value {
+	text-align: center;
+}
