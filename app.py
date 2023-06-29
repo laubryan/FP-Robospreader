@@ -21,6 +21,21 @@ def pageHome():
 def choosePage():
     return render_template("choose-page.html", pageData=_globalDefs)
 
+# Upload file
+@app.route("/upload-file", methods=["POST"])
+def uploadFile():
+    # Get uploaded file
+    uploadedFile = request.files["file"]
+
+    # Save file
+    # TODO: Create unique filename
+    if uploadedFile.filename != "":
+        uploadedFile.save(uploadedFile.filename)
+
+    # TODO: Store filename in session
+    
+    return redirect("/choose-page")
+
 # Evaluate all languages
 @app.route("/evaluate")
 def pageEvaluateAll():
