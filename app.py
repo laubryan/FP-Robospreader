@@ -1,3 +1,5 @@
+import base64
+
 from flask import Flask, request, render_template, redirect
 from engine import processor
 
@@ -50,9 +52,18 @@ def uploadFile():
 @app.route("/process-page-image", methods=["POST"])
 def processPageImage():
 
-    # Get image buffer from client
-    page_image = request.form.get("image-buffer", None)
-    print(f"Received buffer: {len(page_image)} bytes")
+    # Get image buffer string from client
+    page_image_string = request.form.get("image-buffer", None)
+
+    # Strip base64 header
+    base64_image_string = page_image_string.partition("base64,")[-1]
+
+    # Convert base64 string to byte buffer
+    image_buffer = base64.b64decode(base64_image_string)
+
+    # DEBUG: Write image to test file
+    # with open("test.png", "wb") as f:
+    #     f.write(image_buffer)
 
     # DEBUG
     validationData = [

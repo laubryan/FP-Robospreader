@@ -138,7 +138,7 @@ async function populateValidationData(response) {
 //
 // Render PDF document
 //
-function renderDocument(filename) {
+function renderDocument(filename, page=10) {
 
 	// Load PDF
 	let loadingTask = pdfjsLib.getDocument(filename);
@@ -148,45 +148,60 @@ function renderDocument(filename) {
 		displayNumPages(pdf.numPages);
 		
 		// Load target page
-		pdf.getPage(10).then(page => {
+		pdf.getPage(page).then(page => {
 
-			// Initialize viewport
-			let renderWidthPx = 300;
-			let viewport = page.getViewport({ scale: 1 });
-			let scale = renderWidthPx / viewport.width;
-			let outputScale = window.devicePixelRatio || 1;
-			let scaledViewport = page.getViewport({ scale: scale });
-			let canvas = document.getElementById("pdf-view");
-			let context = canvas.getContext("2d");
+			// Render thumbnail
+			renderPage(page, "pdf-view", 300, false);
 
-			// Initialize canvas dimensions
-			canvas.width = Math.floor(scaledViewport.width * outputScale);
-			canvas.height = Math.floor(scaledViewport.height * outputScale);
-			canvas.style.width = Math.floor(scaledViewport.width) + "px";
-			canvas.style.height = Math.floor(scaledViewport.height) + "px";
-
-			// Define transform
-			let transform = outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
-
-			// Create render context
-			let renderContext = {
-				canvasContext: context,
-				transform: transform,
-				viewport: scaledViewport
-			};
-
-			// Render page
-			let renderTask = page.render(renderContext);
-			renderTask.promise.then(() => {
-
-				// Convert canvas image to string
-				let dataUri = canvas.toDataURL("image/png");
-
-				// Save image data to field
-				let bufferField = document.getElementById("image-buffer");
-				bufferField.value = dataUri;
-			});
+			// Render hidden full view
+			renderPage(page, "image-full-view", 1024, true);
 		});
+	});
+}
+
+//
+// Render page to canvas
+//
+function renderPage(page, canvasId, renderWidthPx, saveBuffer) {
+
+	// Initialize viewport
+	let viewport = page.getViewport({ scale: 1 });
+	let scale = renderWidthPx / viewport.width;
+	let outputScale = window.devicePixelRatio || 1;
+	let scaledViewport = page.getViewport({ scale: scale });
+	let canvas = document.getElementById(canvasId);
+	let context = canvas.getContext("2d");
+
+	// Initialize canvas dimensions
+	canvas.width = Math.floor(scaledViewport.width * outputScale);
+	canvas.height = Math.floor(scaledViewport.height * outputScale);
+	canvas.style.width = Math.floor(scaledViewport.width) + "px";
+	canvas.style.height = Math.floor(scaledViewport.height) + "px";
+
+	// Define transform
+	let transform = outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
+
+	// Create render context
+	let renderContext = {
+		canvasContext: context,
+		transform: transform,
+		viewport: scaledViewport
+	};
+
+	// Render page
+	let renderTask = page.render(renderContext);
+	renderTask.promise.then(() => {
+
+		// Save image data to field
+		if (saveBuffer) {
+
+			// Convert canvas image to string
+			let dataUri = canvas.toDataURL("image/png");
+
+			// Save image data to field
+			let bufferField = document.getElementById("image-buffer");
+			bufferField.value = dataUri;
+		}
 	});
 }
 
