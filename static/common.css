@@ -30,6 +30,7 @@ body {
 button {
 	border-radius: 0.2rem;
 	border: 1px solid gray;
+	height: 2rem;
 	margin: 0 0.5rem 0 0.5rem;
 	padding: 0.4rem 2rem 0.4rem 2rem;
 }
@@ -49,17 +50,20 @@ button:hover {
 	box-shadow: 4px 4px 3px #aaa5;
 	margin: 0.3rem 0.3rem 0.8rem 0.3rem;
 	padding: 0.8rem;
+	width: 40%;
+}
+
+.centered {
+	justify-content: center;
 }
 
 .container {
+	display: flex;
 	padding: 0.6rem;
 }
 
-.field {
-	border: 1px solid gray;
-	border-radius: 0.2rem;
-	padding: 0.3rem 1rem 0.3rem 0.7rem;
-	width: 23em;
+footer {
+	width: 86%;
 }
 
 h1 {
@@ -76,11 +80,18 @@ h1 img {
 	vertical-align: middle;
 }
 
-label:disabled {
-	color: gray;
+label {
+	padding-right: 0.52rem;
+}
+
+#pdf-view {
+	border: 1px solid gray;
+	height: 400px;
+	width: 300px;
 }
 
 row {
+	align-items: center;
 	display: flex;
 	margin: 1rem 0 1rem 0;
 }

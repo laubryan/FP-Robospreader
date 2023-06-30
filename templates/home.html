@@ -2,6 +2,8 @@
 	<head>
 		<title>{{pageData["appname"]}}</title>
 		<script src="../static/home.js"></script>
+		<script src="../static/scripts/pdf.js"></script>
+		<script src="../static/scripts/pdf.worker.js"></script>
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='common.css') }}">
 	</head>
 	<body>
@@ -12,24 +14,47 @@
 
 			<!-- Breadcrumbs -->
 			<p class="breadcrumbs">
-				<a href="/">Select File</a>
+				<a href="/">Select Page</a>
 			</p>
 
 			<!-- Content -->
 			<form method="POST" enctype="multipart/form-data">
+
+				<!-- Top row -->
 				<section class="container">
+
+					<!-- Left pane -->
 					<section class="category">
-						<p>Upload the file containing the balance sheet:</p>
+						<row>
+							<p>Select the financial statement:</p>
+							<button id="button-browse" type="button" onclick="browseForFile()">Browse for File</button>
+						</row>
 						<row>
 							<input id="file-control" name="file-control" type="file" hidden="true" accept=".pdf">
-							<div id="file-name" for="file-control" class="field">No file selected</div>
-							<button id="button-browse" onclick="browseForFile()">Browse</button>
+							<label for="file-name">Filename:</label>
+							<span id="file-name" for="file-control">No file selected</span>
 						</row>
 					</section>
-					<section>
-						<button id="button-next" type="submit" formaction="/choose-page">Next</button>
+
+					<!-- Right pane -->
+					<section class="category">
+						<row class="centered">
+							<canvas id="pdf-view"></canvas>
+						</row>
+						<row class="centered">
+							<button id="button-previous" type="button"><</button>
+							<input id="page-number" type="number">
+							<button id="button-next" type="button">></button>
+						</row>
 					</section>
+
 				</section>
+
+				<!-- Bottom row -->
+				<footer>
+					<button id="button-next" type="submit" formaction="/choose-page">Next</button>
+				</footer>
+
 			</form>
 		</article>
 	</body>
