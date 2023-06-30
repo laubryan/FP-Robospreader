@@ -1,10 +1,13 @@
 # Custom
 debug/
 model*/
+node_modules/*
 processed_data/
 statements/
 
 *.bat
+*.json
+*.pdf
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
