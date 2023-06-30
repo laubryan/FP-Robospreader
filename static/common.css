@@ -37,11 +37,7 @@ button {
 button:hover {
 	border-radius: 0.2rem;
 	border: 1px solid orange;
-	transform: scale(1.1);
-}
-
-#button-next {
-	float: right;
+	transform: scale(1.07);
 }
 
 .category {
@@ -50,7 +46,7 @@ button:hover {
 	box-shadow: 4px 4px 3px #aaa5;
 	margin: 0.3rem 0.3rem 0.8rem 0.3rem;
 	padding: 0.8rem;
-	width: 40%;
+	width: 85%;
 }
 
 .centered {
@@ -62,8 +58,22 @@ button:hover {
 	padding: 0.6rem;
 }
 
+fieldset {
+	border: 1px solid #ddd;
+	margin: 2rem 0 1rem 0;
+}
+
+#file-name {
+	width: 17rem;
+}
+
 footer {
-	width: 86%;
+	display: flex;
+	justify-content: space-between;
+	width: 88%;
+}
+footer.solo {
+	justify-content: end;
 }
 
 h1 {
@@ -80,8 +90,27 @@ h1 img {
 	vertical-align: middle;
 }
 
+h2 {
+	margin: 0;
+}
+
+.half {
+	width: 41%;
+}
+
 label {
+	font-weight: bold;
 	padding-right: 0.52rem;
+}
+
+.line-item-label {
+	width: 24rem;
+}
+
+p {
+	font-family: sans-serif;
+	line-height: 1.4;
+	margin: 0;
 }
 
 #pdf-view {
@@ -94,4 +123,40 @@ row {
 	align-items: center;
 	display: flex;
 	margin: 1rem 0 1rem 0;
+}
+
+/* Validation row controls */
+.validation-row {
+	background-color: #d8d8d8;
+	padding-left: 1rem;
+}
+
+.validation-row button {
+	height: 2.3em;
+	padding: 0;
+	width: 2.3em;
+}
+.validation-row button img {
+	height: 1.5rem;
+	width: 1.5rem;
+}
+
+.validation-row input[type="number"] {
+	height: 2.3em;
+	text-align: right;
+}
+
+.validation-row input[type="checkbox"] {
+	margin-left: 1rem;
+	transform: scale(2);
+}
+
+.validation-row label {
+	align-items: center;
+	background-color: #ddd;
+	display: flex;
+	height: 1.5em;
+	margin: 0 0.5rem 0 0.5rem;
+	padding: 0.2rem 0.5rem 0.2rem 0.5rem;
+	width: 20rem;
 }

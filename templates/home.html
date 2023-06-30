@@ -7,37 +7,42 @@
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='common.css') }}">
 	</head>
 	<body>
-		<article class="card">
 
-			<!-- Header Title -->
-			<h1><img src="{{ url_for('static', filename='robospreader.png') }}">{{pageData["appname"]}}</h1>
+		<!-- Header Title -->
+		<h1><img src="{{ url_for('static', filename='images/robospreader.png') }}">{{pageData["appname"]}}</h1>
 
-			<!-- Breadcrumbs -->
-			<p class="breadcrumbs">
-				<a href="/">Select Page</a>
-			</p>
-
-			<!-- Content -->
-			<form method="POST" enctype="multipart/form-data">
+		<!-------------------------------- Choose Page -------------------------------->
+		<article id="choose-page" class="card">
+			<form id="choose-page-form" method="POST" enctype="multipart/form-data">
 
 				<!-- Top row -->
 				<section class="container">
 
 					<!-- Left pane -->
-					<section class="category">
+					<section class="category half">
+						<h2>Select Page</h2>
 						<row>
-							<p>Select the financial statement:</p>
-							<button id="button-browse" type="button" onclick="browseForFile()">Browse for File</button>
+							<p>Click Browse to select a financial statement, and then select the page containing the balance sheet.</p>
 						</row>
-						<row>
+						<fieldset>
 							<input id="file-control" name="file-control" type="file" hidden="true" accept=".pdf">
-							<label for="file-name">Filename:</label>
-							<span id="file-name" for="file-control">No file selected</span>
-						</row>
+
+							<row>
+								<label for="file-name">Filename:</label>
+								<span id="file-name" for="file-control">No file selected</span>
+								<button id="button-browse" type="button" onclick="browseForFile()">Browse</button>
+							</row>
+
+							<row>
+								<label for="num-pages">Pages:</label>
+								<span id="num-pages" for="file-control">-</span>
+							</row>
+
+						</fieldset>
 					</section>
 
 					<!-- Right pane -->
-					<section class="category">
+					<section class="category half">
 						<row class="centered">
 							<canvas id="pdf-view"></canvas>
 						</row>
@@ -46,16 +51,70 @@
 							<input id="page-number" type="number">
 							<button id="button-next" type="button">></button>
 						</row>
+						<input id="image-buffer" name="image-buffer" type="hidden" value="" />
 					</section>
 
 				</section>
 
 				<!-- Bottom row -->
-				<footer>
-					<button id="button-next" type="submit" formaction="/choose-page">Next</button>
+				<footer class="solo">
+					<button id="button-next" type="button" onclick="submitPage()">Next</button>
 				</footer>
-
 			</form>
 		</article>
+
+		<!-------------------------------- Validate Results -------------------------------->
+		<article id="validate-results" class="card" hidden="true">
+			<form method="POST" enctype="multipart/form-data">
+
+				<!-- Top row -->
+				<section class="container">
+					<section class="category">
+
+						<h2>Validation</h2>
+
+						<row>
+							<p>Validate the values and correct any errors:</p>
+						</row>
+
+						<!-- Data -->
+						<section id="validation-content">
+						</section>
+					</section>
+				</section>
+
+				<!-- Bottom row -->
+				<footer>
+					<button id="button-previous" type="button">Previous</button>
+					<button id="button-next" type="button" onclick="acceptValidation()">Next</button>
+				</footer>
+			</form>
+		</article>
+
+		<!-------------------------------- Download Data -------------------------------->
+		<article id="download-data" class="card" hidden="true">
+
+			<!-- Top row -->
+			<section class="container">
+				<section class="category">
+
+					<h2>Download</h2>
+
+					<row>
+						<p>Download the data in one of the following formats:</p>
+					</row>
+					<section>
+						<button type="button" onclick="downloadData('CSV')">Download as CSV</button>
+						<button type="button" onclick="downloadData('JSON')">Download as JSON</button>
+					</section>
+				</section>
+			</section>
+
+			<!-- Bottom row -->
+			<footer class="solo">
+				<button id="button-restart" type="button" onclick="restart()">Start Over</button>
+			</footer>
+		</article>
+
 	</body>
 </html>
