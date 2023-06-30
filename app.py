@@ -1,7 +1,5 @@
-import base64
-
-from flask import Flask, request, render_template, redirect
 from engine import processor
+from flask import Flask, request, render_template, redirect
 
 app = Flask(__name__)
 
@@ -55,25 +53,7 @@ def processPageImage():
     # Get image buffer string from client
     page_image_string = request.form.get("image-buffer", None)
 
-    # Strip base64 header
-    base64_image_string = page_image_string.partition("base64,")[-1]
+    # Convert image to data
+    validation_data = processor.convertImage(page_image_string)
 
-    # Convert base64 string to byte buffer
-    image_buffer = base64.b64decode(base64_image_string)
-
-    # DEBUG: Write image to test file
-    # with open("test.png", "wb") as f:
-    #     f.write(image_buffer)
-
-    # DEBUG
-    validationData = [
-        { "label": "Short-term investments", "extracted_value": "3799", "original_value": "3799" },
-        { "label": "Accounts receivable", "extracted_value": "926", "original_value": "926" },
-        { "label": "Total current assets", "extracted_value": "7516", "original_value": "7516" },
-        { "label": "Investments deposits and other assets", "extracted_value": "936", "original_value": "936" },
-        { "label": "Deferred income tax", "extracted_value": "134", "original_value": "134" },
-        { "label": "Total current liabilities", "extracted_value": "7775", "original_value": "7775" },
-        { "label": "Total shareholders equity", "extracted_value": "4400", "original_value": "4400" },
-    ]
-
-    return { "validation_data": validationData }
+    return { "validation_data": validation_data }
