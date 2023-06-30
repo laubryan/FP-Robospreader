@@ -202,7 +202,7 @@ function restart() {
 	fileControl.value = "";
 
 	// Filename
-	displayFilename("");
+	displayFilename("No file selected");
 
 	// Pages
 	displayNumPages("-");
@@ -211,6 +211,10 @@ function restart() {
 	let canvas = document.getElementById("pdf-view");
 	let context = canvas.getContext("2d");
 	context.clearRect(0, 0, canvas.width, canvas.height);
+
+	// Page number
+	let pageNumberField = document.getElementById("page-number");
+	pageNumberField.value = "99";
 
 	// Validation Rows
 	let container = document.getElementById("validation-content");

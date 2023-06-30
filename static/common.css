@@ -103,6 +103,18 @@ label {
 	padding-right: 0.52rem;
 }
 
+/*
+	Remove arrow controls from number fields
+	https://stackoverflow.com/questions/71296535/how-to-remove-arrow-on-input-type-number-with-tailwind-css
+*/
+@layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
 .line-item-label {
 	width: 24rem;
 }
@@ -111,6 +123,12 @@ p {
 	font-family: sans-serif;
 	line-height: 1.4;
 	margin: 0;
+}
+
+#page-number {
+	height: 2.4em;
+	text-align: center;
+	width: 3rem;
 }
 
 #pdf-view {
