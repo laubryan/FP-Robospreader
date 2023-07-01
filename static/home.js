@@ -52,6 +52,22 @@ function browseForFile() {
 			let filename = fileControl.files[0].name;
 			displayFilename(filename);
 
+			// DEBUG
+			switch (filename) {
+				case "407 International - March 31 2021.pdf":
+					renderDocument(fileURI, 2);
+					return;
+				case "Air Canada - December 31 2019.pdf":
+					renderDocument(fileURI, 10);
+					return;
+				case "BCE - Financial Report - 2020-2022.pdf":
+					renderDocument(fileURI, 83);
+					return;
+				case "Better Life Pharama Inc - Jan 31 Oct 31 2022.pdf":
+					renderDocument(fileURI, 3);
+					return;
+			}
+
 			// Render document
 			renderDocument(fileURI);
 		}
@@ -248,7 +264,7 @@ async function populateValidationData(response) {
 //
 // Render PDF document
 //
-function renderDocument(filename, pageNum=10) {
+function renderDocument(filename, pageNum=1) {
 
 	// Load PDF
 	let loadingTask = pdfjsLib.getDocument(filename);
