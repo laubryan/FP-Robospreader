@@ -5,6 +5,8 @@ import base64
 import cv2
 import io
 import numpy as np
+import pytesseract
+import re
 import torch
 
 from PIL import Image
@@ -38,9 +40,9 @@ def boxes_overlap(box1, box2, overlap_ratio=0.4):
   return False
 
 #
-# Convert image to data
+# Extract data from image
 #
-def convertImage(page_image_string):
+def processImage(page_image_string):
 
 	# Strip base64 header
 	base64_image_string = page_image_string.partition("base64,")[-1]
@@ -68,23 +70,130 @@ def convertImage(page_image_string):
 	# Identify table structure
 	column_boxes = identifyTableStructure(binarized_image, table_location)
 
+	# Identify entire page text
+	page_text = identifyPageText(binarized_image)
+
+	# Extract first column text
+	first_column_text = extractFirstColumnText(page_text, table_location, column_boxes)
+
+	# Identify line item labels
+	line_item_labels = identifyLineItemLabels(first_column_text)
+	print(line_item_labels)
+
+	# Extract complete data elements
+	data_elements = extractLineItemElements(line_item_labels, page_text, column_boxes)
+	print(data_elements)
+
 	# DEBUG: Write image to test file
-	page_image.save("test.png")
+	page_image.save("test-color.png")
 	binarized_image.save("test-binarized.png")
 
 	# DEBUG
-	validation_data = [
-			{ "label": "Short-term investments", "extracted_value": "3799", "original_value": "3799" },
-			{ "label": "Accounts receivable", "extracted_value": "926", "original_value": "926" },
-			{ "label": "Total current assets", "extracted_value": "7516", "original_value": "7516" },
-			{ "label": "Investments deposits and other assets", "extracted_value": "936", "original_value": "936" },
-			{ "label": "Deferred income tax", "extracted_value": "134", "original_value": "134" },
-			{ "label": "Total current liabilities", "extracted_value": "7775", "original_value": "7775" },
-			{ "label": "Total shareholders equity", "extracted_value": "4400", "original_value": "4400" },
-	]
+	# validation_data = [
+	# 		{ "label": "Short-term investments", "extracted_value": "3799", "original_value": "3799" },
+	# 		{ "label": "Accounts receivable", "extracted_value": "926", "original_value": "926" },
+	# 		{ "label": "Total current assets", "extracted_value": "7516", "original_value": "7516" },
+	# 		{ "label": "Investments deposits and other assets", "extracted_value": "936", "original_value": "936" },
+	# 		{ "label": "Deferred income tax", "extracted_value": "134", "original_value": "134" },
+	# 		{ "label": "Total current liabilities", "extracted_value": "7775", "original_value": "7775" },
+	# 		{ "label": "Total shareholders equity", "extracted_value": "4400", "original_value": "4400" },
+	# ]
+
+	# Assemble validation data
+	validation_data = []
+	for element in data_elements["elements"]:
+		validation_data.append({"label": element["label"], "extracted_value": element["value"], "original_value": element["value"] })
 
 	# Return validation data
 	return validation_data
+
+#
+# Extract text contained in leftmost column
+#
+def extractFirstColumnText(text_data, table_location, column_boxes):
+
+		# Filter first column (fc) elements
+	fc_box = column_boxes[0]
+	fc_pd = text_data[(text_data["right"]) < int(fc_box[2])] # Constrain to first column
+	fc_pd = text_data[(text_data["top"]) >= int(table_location[1])] # Constrain to table
+	fc_pd = fc_pd.dropna(subset=["text"]) # Drop NaN rows
+	fc_pd = fc_pd[fc_pd["text"].str.isspace() & fc_pd["text"] != ""] # Drop rows that have blank text
+	fc_pd.reset_index(inplace=True)
+	print(f"Column number of fields: {len(fc_pd)}")
+
+	return fc_pd
+
+#
+# Extract line item elements
+#
+def extractLineItemElements(line_item_labels, text_data, column_boxes):
+
+	# Count line item labels
+	num_line_item_labels = len(line_item_labels)
+
+	# Get column bounding box
+	prospective_elements = []
+	for fc_box in column_boxes:
+
+		# Extract elements
+		elements, num_extracted_values = extract_column_elements(fc_box, line_item_labels, text_data)
+		prospective_elements.append({ "elements": elements, "num_extracted_values": num_extracted_values })
+
+	# Prefer the leftmost column with at least half of the values
+	best_values = None
+	acceptable_threshold = int(num_line_item_labels * 0.5)
+	for elements in prospective_elements:
+		if elements["num_extracted_values"] > acceptable_threshold:
+			best_values = elements
+			break
+
+	# Otherwise just use the best column
+	if best_values == None:
+		best_values = sorted(prospective_elements, key=lambda x: x["num_extracted_values"], reverse=True)[0]
+
+	# Display the results
+	print(f"Extracted values: {best_values['num_extracted_values']} of {num_line_item_labels}")
+
+	return best_values
+
+#
+# Extract line elements for the designated column
+#
+def extract_column_elements(column_box, df_labels, df_page_ocr):
+
+	# Extract first column cells for each line item
+	elements = []
+	v_tolerance = 12
+	num_extracted_values = 0
+	for row in df_labels.itertuples():
+
+		# Extract OCR text for cell in this column
+		val_pd = df_page_ocr[\
+			(df_page_ocr["left"] >= int(column_box[0])) & ((df_page_ocr["right"]) <= int(column_box[2])) & \
+			(df_page_ocr["top"] >= int(row.top - v_tolerance)) & ((df_page_ocr["bottom"]) <= int(row.bottom + v_tolerance))
+		]
+
+		# Only save value if it's not blank
+		if not val_pd.empty:
+
+			# Get the list of values (there can be more than one)
+			cell_values = val_pd["text"].values
+
+			# Strip non-value characters from all elements
+			cell_values = [re.sub(r"[^0-9(). ]+", "", element) for element in cell_values]
+
+			# Take the first value
+			cell_value = cell_values[0]
+			if cell_value != "":
+				num_extracted_values += 1
+		else:
+			cell_value = ""
+
+		# Save element data
+		element = { "label": row.text, "value": cell_value }
+		elements.append(element)
+
+	return elements, num_extracted_values
 
 # Global adaptive thresholding
 # Returns: binarized array
@@ -101,6 +210,56 @@ def global_adaptive_thresholding(image, height, width, depth):
 	otsu_threshold, binarized_array = cv2.threshold(grayscale_image, 127, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
 	return binarized_array
+
+#
+# Identify line item labels
+#
+def identifyLineItemLabels(text_data):
+
+	# Concatenate words and widths
+	line_item_labels_pd = text_data
+	line_item_labels_pd = text_data\
+		.groupby(["par_num", "line_num"])\
+		.agg({"text": " ".join, "left": "first", "top": "first", "width": "sum", "height": "max"})\
+		.reset_index()
+
+	# Calculate other fields
+	line_item_labels_pd["bottom"] = line_item_labels_pd["top"] + line_item_labels_pd["height"]
+
+	# Strip non-alphanumeric chars
+	inter_word_gap = 5
+	line_item_labels_pd["text"].replace(r"[^0-9a-zA-Z ]+", "", regex=True, inplace=True)
+
+	# Drop non-essential columns
+	line_item_labels_pd.drop(columns=["par_num", "line_num"], inplace=True)
+
+	# Compute peak left margins
+	# histogram, bin_margins = np.histogram(fc_formatted_pd["left"], bins=10)
+	# top_peak_indices = np.argsort(histogram)[-2:]
+	# peak_margins = (bin_margins[:-1] + bin_margins[1:]) / 2
+	# print(np.round(peak_margins[top_peak_indices]))
+
+	# Count number of labels
+	num_item_labels = len(line_item_labels_pd)
+
+	return line_item_labels_pd
+
+#
+# Identify page text
+#
+def identifyPageText(image):
+
+	# OCR page text
+	page_pd_ocr = pytesseract.image_to_data(image, output_type="data.frame")
+	page_pd_ocr.dropna(subset=["text"], inplace=True)
+	print(f"Page number of fields: {len(page_pd_ocr)}")
+
+	# Calculate other position values
+	page_pd_ocr["right"] = page_pd_ocr["left"] + page_pd_ocr["width"]
+	page_pd_ocr["bottom"] = page_pd_ocr["top"] + page_pd_ocr["height"]
+	page_pd_ocr.reset_index(inplace=True)
+
+	return page_pd_ocr
 
 #
 # Identify table structure
