@@ -40,6 +40,24 @@ function browseForFile() {
 }
 
 //
+// Delete validation row
+//
+function deleteRow(rowId) {
+
+	// Search for row
+	let container = document.getElementById("validation-content");
+	let targetId = "row-" + rowId;
+	for (rowElement of container.children) {
+
+		// Delete the matching row
+		if (rowElement.id == targetId) {
+			container.removeChild(rowElement);
+			return;
+		}
+	}
+}
+
+//
 // Display filename
 //
 function displayFilename(filename) {
@@ -117,12 +135,12 @@ async function populateValidationData(response) {
 
 		// Define row HTML
 		let rowHtml = `
-		<row class="validation-row" data-index="row-${i}" data-label="${row.label}">
+		<row id="row-${i}" class="validation-row" data-index="row-${i}" data-label="${row.label}">
 			<span class='line-item-label'>${row.label}</span>
 			<img src="/static/images/debug-field-value.png">
-			<button id="btn-back" class="button-playback" title="RW"><img src="/static/images/play.png"></button>
+			<button id="btn-play" type="button" title="Play"><img src="/static/images/play.png"></button>
 			<input type="number" value="${row.extracted_value}">
-			<input type="checkbox">
+			<button id="btn-delete" type="button" title="Delete" onclick="deleteRow(${i})"><img src="/static/images/delete.png"></button>
 		</row>
 		`;
 
@@ -229,7 +247,7 @@ function restart() {
 
 	// Page number
 	let pageNumberField = document.getElementById("page-number");
-	pageNumberField.value = "99";
+	pageNumberField.value = "0";
 
 	// Validation Rows
 	let container = document.getElementById("validation-content");
