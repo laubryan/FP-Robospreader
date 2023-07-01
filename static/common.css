@@ -158,15 +158,13 @@ row {
 	height: 1.5rem;
 	width: 1.5rem;
 }
+.validation-row #btn-delete {
+	margin-left: 2rem;
+}
 
 .validation-row input[type="number"] {
 	height: 2.3em;
 	text-align: right;
-}
-
-.validation-row input[type="checkbox"] {
-	margin-left: 1rem;
-	transform: scale(2);
 }
 
 .validation-row label {
