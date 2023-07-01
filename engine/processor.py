@@ -184,8 +184,11 @@ def extract_column_elements(column_box, df_labels, df_page_ocr):
 
 			# Take the first value
 			cell_value = cell_values[0]
-			if cell_value != "":
+			if cell_value.strip() != "":
+
+				# Count extracted value
 				num_extracted_values += 1
+
 		else:
 			cell_value = ""
 
@@ -226,12 +229,17 @@ def identifyLineItemLabels(text_data):
 	# Calculate other fields
 	line_item_labels_pd["bottom"] = line_item_labels_pd["top"] + line_item_labels_pd["height"]
 
-	# Strip non-alphanumeric chars
+	# Format label
 	inter_word_gap = 5
-	line_item_labels_pd["text"].replace(r"[^0-9a-zA-Z ]+", "", regex=True, inplace=True)
+	line_item_labels_pd["text"].replace(r"[^0-9a-zA-Z ]+", "", regex=True, inplace=True) # Strip non-alphanumeric chars
+	line_item_labels_pd["text"].replace(r"[\d ]+$", "", regex=True, inplace=True) # Strip trailing numbers
 
 	# Drop non-essential columns
 	line_item_labels_pd.drop(columns=["par_num", "line_num"], inplace=True)
+
+	# Drop labels that are too long to be realistic
+	line_item_labels_pd = line_item_labels_pd[line_item_labels_pd["width"] < 250]
+	line_item_labels_pd.reset_index(inplace=True)
 
 	# Compute peak left margins
 	# histogram, bin_margins = np.histogram(fc_formatted_pd["left"], bins=10)
