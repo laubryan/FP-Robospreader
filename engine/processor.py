@@ -56,7 +56,7 @@ def processImage(page_image_string):
 	page_width = page_image.width
 	page_height = page_image.height
 	page_depth = 3
-	# print(f"Image dimensions: {page_width} x {page_height} x {page_depth}")
+	print(f"Image dimensions: {page_width} x {page_height} x {page_depth}")
 
 	# Binarize image
 	binarized_array = global_adaptive_thresholding(page_image, page_height, page_width, page_depth)
@@ -66,7 +66,6 @@ def processImage(page_image_string):
 
 	# Segment table
 	table_location = segmentTable(binarized_image)
-	# print(f"Table location: {table_location}")
 
 	# Identify table structure
 	column_boxes = identifyTableStructure(binarized_image, table_location)
@@ -83,22 +82,6 @@ def processImage(page_image_string):
 
 	# Extract complete data elements
 	data_elements = extractLineItemElements(line_item_labels, page_text, column_boxes, page_image)
-	# print(data_elements)
-
-	# DEBUG: Write image to test file
-	page_image.save("test-color.png")
-	binarized_image.save("test-binarized.png")
-
-	# DEBUG: Dummy validation data
-	# validation_data = [
-	# 		{ "label": "Short-term investments", "extracted_value": "3799", "original_value": "3799" },
-	# 		{ "label": "Accounts receivable", "extracted_value": "926", "original_value": "926" },
-	# 		{ "label": "Total current assets", "extracted_value": "7516", "original_value": "7516" },
-	# 		{ "label": "Investments deposits and other assets", "extracted_value": "936", "original_value": "936" },
-	# 		{ "label": "Deferred income tax", "extracted_value": "134", "original_value": "134" },
-	# 		{ "label": "Total current liabilities", "extracted_value": "7775", "original_value": "7775" },
-	# 		{ "label": "Total shareholders equity", "extracted_value": "4400", "original_value": "4400" },
-	# ]
 
 	# Assemble validation data
 	validation_data = []
@@ -108,7 +91,6 @@ def processImage(page_image_string):
 		# Convert cell image to base64
 		cell_image_buffer = BytesIO()
 		element["cell_image"].save(cell_image_buffer, format="PNG")
-		# base64_image_text = base64_image_prefix + base64.b64encode(cell_image_buffer.getvalue())
 		base64_image_string = base64_image_prefix + base64.b64encode(cell_image_buffer.getvalue()).decode("utf-8")
 
 		# Assemble data element
@@ -129,7 +111,6 @@ def extractFirstColumnText(text_data, table_location, column_boxes):
 	fc_pd = fc_pd.dropna(subset=["text"]) # Drop NaN rows
 	fc_pd = fc_pd[fc_pd["text"].str.isspace() & fc_pd["text"] != ""] # Drop rows that have blank text
 	fc_pd.reset_index(inplace=True)
-	# print(f"Column number of fields: {len(fc_pd)}")
 
 	return fc_pd
 
@@ -160,9 +141,6 @@ def extractLineItemElements(line_item_labels, text_data, column_boxes, page_imag
 	# Otherwise just use the best column
 	if best_values == None:
 		best_values = sorted(prospective_elements, key=lambda x: x["num_extracted_values"], reverse=True)[0]
-
-	# Display the results
-	# print(f"Extracted values: {best_values['num_extracted_values']} of {num_line_item_labels}")
 
 	return best_values
 
@@ -273,7 +251,6 @@ def identifyPageText(image):
 	# OCR page text
 	page_pd_ocr = pytesseract.image_to_data(image, output_type="data.frame")
 	page_pd_ocr.dropna(subset=["text"], inplace=True)
-	# print(f"Page number of fields: {len(page_pd_ocr)}")
 
 	# Calculate other position values
 	page_pd_ocr["right"] = page_pd_ocr["left"] + page_pd_ocr["width"]
@@ -305,7 +282,6 @@ def identifyTableStructure(binarized_image, table_location):
 
 	# Extract only columns
 	max_column_area = (table_location[2] - table_location[0]) * (table_location[3] - table_location[1]) * 0.8
-	# print(f"Max column area: {max_column_area}")
 	column_boxes = [box for box in ts_results['boxes'] if is_column(box) and box_area(box)<max_column_area]
 	num_boxes = len(column_boxes)
 
@@ -336,7 +312,6 @@ def identifyTableStructure(binarized_image, table_location):
 	# Remove discarded columns that were merged
 	column_boxes = [box for box in merged_columns if not is_box_in_list(box, removed_columns)]
 	num_boxes = len(column_boxes)
-	print(f"Number of columns: {num_boxes}")
 
 	# Sort columns left to right
 	column_boxes = sorted(column_boxes, key=lambda box: box[0])
