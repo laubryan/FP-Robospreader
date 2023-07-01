@@ -2,19 +2,38 @@
 // Home
 //
 
+// Globals
+var cachedPDF = null;
+var currentPageNumber = 0;
+
+var buttonPreviousPage = null;
+var buttonNextPage = null;
+var buttonNextSelect = null;
+var buttonNextValidate = null;
+var fieldPageNumber = null;
+
 //
 // Accept validations
 //
 function acceptValidation() {
 
 	// Update page state
-	updatePageState(2);
+	updatePageState(3);
 }
 
 //
 // Browse for file
 //
 function browseForFile() {
+
+	// Assign control references
+	buttonPreviousPage = document.getElementById("button-previous");
+	buttonNextPage = document.getElementById("button-next");
+	fieldPageNumber = document.getElementById("page-number");
+	buttonNextSelect = document.getElementById("button-next-select");
+	buttonNextValidate = document.getElementById("page-next-validate");
+
+	// Get and click file control
 	let fileControl = document.getElementById("file-control");
 	fileControl.click();
 	fileControl.onchange = () => {
@@ -37,6 +56,49 @@ function browseForFile() {
 			renderDocument(fileURI);
 		}
 	}
+}
+
+//
+// Change page using delta
+//
+function changePageDelta(pageDelta) {
+
+	// Only operate if PDF is cached
+	if (!cachedPDF) return;
+
+	// Disable page controls
+	enablePageControls(false);
+	
+	// Adjust current page
+	let oldPageNumber = currentPageNumber;
+	currentPageNumber += pageDelta;
+	if (currentPageNumber < 1) {
+		currentPageNumber = 1;
+	}
+	else if (currentPageNumber > cachedPDF.numPages) {
+		currentPageNumber = cachedPDF.numPages;
+	}
+
+	// No need to re-render if it's the same page
+	if (currentPageNumber == oldPageNumber) {
+
+		// Enable page controls
+		enablePageControls(true);
+
+		// Selectively disable buttons at first/last page
+		if (currentPageNumber == 1) {
+			buttonPreviousPage.disabled = true;
+		}
+		else if (currentPageNumber >= cachedPDF.numPages) {
+			buttonNextPage.disabled = true;
+		}
+
+		// Don't re-render page
+		return;
+	}
+
+	// Display new page
+	displayTargetPage(cachedPDF, currentPageNumber);
 }
 
 //
@@ -76,6 +138,26 @@ function displayNumPages(numPages) {
 }
 
 //
+// Display the target page
+//
+function displayTargetPage(pdf, pageNum) {
+
+	// Get the page
+	pdf.getPage(pageNum).then(page => {
+
+		// Render thumbnail
+		renderPageToCanvas(page, "pdf-view", 300, false);
+
+		// Render hidden full view
+		renderPageToCanvas(page, "image-full-view", 1024, true);
+
+		// Display current page number
+		currentPageNumber = pageNum;
+		fieldPageNumber.value = pageNum;
+	});
+}
+
+//
 // Download data as format
 //
 function downloadData(format) {
@@ -93,6 +175,16 @@ function downloadData(format) {
 		dataObject = array.map(it => Object.values(it).toString()).join('\n');
 	}
 	saveObjectAsFile("financial-data." + format, dataObject);
+}
+
+//
+// Enable/disable page controls
+//
+function enablePageControls(enable) {
+	buttonPreviousPage.disabled = !enable;
+	buttonNextPage.disabled = !enable;
+	fieldPageNumber.disabled = !enable;
+	buttonNextSelect.disabled = !enable;
 }
 
 //
@@ -156,31 +248,27 @@ async function populateValidationData(response) {
 //
 // Render PDF document
 //
-function renderDocument(filename, page=10) {
+function renderDocument(filename, pageNum=10) {
 
 	// Load PDF
 	let loadingTask = pdfjsLib.getDocument(filename);
 	loadingTask.promise.then(pdf => {
 
+		// Cache loaded PDF
+		cachedPDF = pdf;
+
 		// Display number of pages
 		displayNumPages(pdf.numPages);
 		
-		// Load target page
-		pdf.getPage(page).then(page => {
-
-			// Render thumbnail
-			renderPage(page, "pdf-view", 300, false);
-
-			// Render hidden full view
-			renderPage(page, "image-full-view", 1024, true);
-		});
+		// Display target page
+		displayTargetPage(pdf, pageNum);
 	});
 }
 
 //
 // Render page to canvas
 //
-function renderPage(page, canvasId, renderWidthPx, saveBuffer) {
+function renderPageToCanvas(page, canvasId, renderWidthPx, saveBuffer) {
 
 	// Initialize viewport
 	let viewport = page.getViewport({ scale: 1 });
@@ -219,16 +307,17 @@ function renderPage(page, canvasId, renderWidthPx, saveBuffer) {
 			// Save image data to field
 			let bufferField = document.getElementById("image-buffer");
 			bufferField.value = dataUri;
+
+			// Enable page controls
+			enablePageControls(true);
 		}
 	});
 }
 
 //
-// Reset and restart
+// Reset select page state
 //
-function restart() {
-
-	// Reset controls
+function resetSelectPage() {
 
 	// File control
 	let fileControl = document.getElementById("file-control");
@@ -249,9 +338,34 @@ function restart() {
 	let pageNumberField = document.getElementById("page-number");
 	pageNumberField.value = "0";
 
+	// Reset page controls
+	enablePageControls(false);
+}
+
+//
+// Reset validation page state
+//
+function resetValidationPage() {
+
 	// Validation Rows
 	let container = document.getElementById("validation-content");
 	container.innerHTML = "";
+}
+
+//
+// Reset and restart
+//
+function restart(resetSelect, resetValidation) {
+
+	// Reset select page state
+	if (resetSelect) {
+		resetSelectPage();
+	}
+
+	// Reset validation page state
+	if (resetValidation) {
+		resetValidationPage();
+	}
 
 	// Update page state
 	updatePageState(0);
@@ -284,7 +398,7 @@ function saveObjectAsFile(filename, dataObject) {
 //
 async function submitPage() {
 
-	// Update page state
+	// Display working page
 	updatePageState(1);
 
 	// Get form object for submission
@@ -303,6 +417,9 @@ async function submitPage() {
 		if (response.ok) {
 			// Success
 			populateValidationData(response);
+
+			// Display validation page
+			updatePageState(2);
 		}
 	}).catch(error => {
 		// Error
@@ -319,6 +436,7 @@ function updatePageState(visibleSectionIndex) {
 	// Get section references
 	let sections = [
 		document.getElementById("choose-page"),
+		document.getElementById("working-page"),
 		document.getElementById("validate-results"),
 		document.getElementById("download-data"),
 	];

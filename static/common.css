@@ -15,18 +15,11 @@ a:hover {
 a h1:hover {
 	color: orange;
 }
-
 body {
 	font-family: Arial, Helvetica, sans-serif;
 }
 
-.breadcrumbs {
-	margin: 0.5rem 0.5rem 0 1rem;
-}
-.breadcrumbs a {
-	text-decoration: none;
-}
-
+/* Buttons */
 button {
 	border-radius: 0.2rem;
 	border: 1px solid gray;
@@ -34,12 +27,16 @@ button {
 	margin: 0 0.5rem 0 0.5rem;
 	padding: 0.4rem 2rem 0.4rem 2rem;
 }
-button:hover {
+button:hover:not(:disabled) {
 	border-radius: 0.2rem;
 	border: 1px solid orange;
 	transform: scale(1.07);
 }
+button:disabled {
+	border: 1px solid #bbb;
+}
 
+/* Category sections */
 .category {
 	border: 1px solid #a0a0a0;
 	border-radius: 0.5rem;
@@ -49,24 +46,29 @@ button:hover {
 	width: 85%;
 }
 
+/* Style for centered elements */
 .centered {
 	justify-content: center;
 }
 
+/* Content container */
 .container {
 	display: flex;
 	padding: 0.6rem;
 }
 
+/* Container for file information fields */
 fieldset {
 	border: 1px solid #ddd;
 	margin: 2rem 0 1rem 0;
 }
 
+/* Filename field */
 #file-name {
 	width: 80%;
 }
 
+/* Footer containing navigation buttons */
 footer {
 	display: flex;
 	justify-content: space-between;
@@ -76,6 +78,7 @@ footer.solo {
 	justify-content: end;
 }
 
+/* Main title */
 h1 {
 	background-color: gray;
 	border-radius: 0.3rem 0.3rem 0 0;
@@ -83,21 +86,23 @@ h1 {
 	margin: 0;
 	padding: 0.5rem 1rem 0.5rem 1rem;
 }
-
 h1 img {
 	padding-right: 1rem;
 	width: 3rem;
 	vertical-align: middle;
 }
 
+/* Secondary title */
 h2 {
 	margin: 0;
 }
 
+/* Split screen card modifier */
 .half {
 	width: 41%;
 }
 
+/* Labels */
 label {
 	font-weight: bold;
 	padding-right: 0.52rem;
@@ -115,28 +120,40 @@ label {
   }
 }
 
+/* Labels for statement line items */
 .line-item-label {
 	width: 24rem;
 }
 
+/* Generic text */
 p {
 	font-family: sans-serif;
 	line-height: 1.4;
 	margin: 0;
 }
 
+/* Page number display */
 #page-number {
+	border: 1px solid gray;
+	border-radius: 0.3rem;
+	color: black;
 	height: 2.4em;
 	text-align: center;
 	width: 3rem;
 }
+#page-number:disabled {
+	border: 1px solid #bbb;
+	color: #bbb;
+}
 
+/* Page display canvas */
 #pdf-view {
 	border: 1px solid gray;
 	height: 400px;
 	width: 300px;
 }
 
+/* Row container */
 row {
 	align-items: center;
 	display: flex;
@@ -148,7 +165,6 @@ row {
 	background-color: #d8d8d8;
 	padding-left: 1rem;
 }
-
 .validation-row button {
 	height: 2.3em;
 	padding: 0;
@@ -161,12 +177,10 @@ row {
 .validation-row #btn-delete {
 	margin-left: 2rem;
 }
-
 .validation-row input[type="number"] {
 	height: 2.3em;
 	text-align: right;
 }
-
 .validation-row label {
 	align-items: center;
 	background-color: #ddd;
@@ -175,4 +189,19 @@ row {
 	margin: 0 0.5rem 0 0.5rem;
 	padding: 0.2rem 0.5rem 0.2rem 0.5rem;
 	width: 20rem;
+}
+
+/* Working page card */
+.working {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	font-size: 2em;
+	justify-content: center;
+	height: 25rem;
+}
+
+/* Processing animated icon */
+.working img {
+	width: 15rem;
 }

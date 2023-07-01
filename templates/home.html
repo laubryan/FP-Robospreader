@@ -47,9 +47,9 @@
 							<canvas id="pdf-view"></canvas>
 						</row>
 						<row class="centered">
-							<button id="button-previous" type="button"><</button>
-							<input id="page-number" type="number" value="0">
-							<button id="button-next" type="button">></button>
+							<button id="button-previous" type="button" onclick="changePageDelta(-1)" disabled><</button>
+							<input id="page-number" type="number" value="0" readonly disabled>
+							<button id="button-next" type="button" onclick="changePageDelta(1)" disabled>></button>
 						</row>
 						<canvas id="image-full-view" style="display: none"></canvas>
 						<input id="image-buffer" name="image-buffer" type="hidden" value="" />
@@ -59,7 +59,7 @@
 
 				<!-- Bottom row -->
 				<footer class="solo">
-					<button id="button-next" type="button" onclick="submitPage()">Next</button>
+					<button id="button-next-select" type="button" onclick="submitPage()" disabled>Next</button>
 				</footer>
 			</form>
 		</article>
@@ -86,8 +86,8 @@
 
 				<!-- Bottom row -->
 				<footer>
-					<button id="button-previous" type="button">Previous</button>
-					<button id="button-next" type="button" onclick="acceptValidation()">Next</button>
+					<button id="button-previous" type="button" onclick="restart(false, true)">Previous</button>
+					<button id="button-next-validate" type="button" onclick="acceptValidation()">Next</button>
 				</footer>
 			</form>
 		</article>
@@ -113,8 +113,21 @@
 
 			<!-- Bottom row -->
 			<footer class="solo">
-				<button id="button-restart" type="button" onclick="restart()">Start Over</button>
+				<button id="button-restart" type="button" onclick="restart(true, true)">Start Over</button>
 			</footer>
+		</article>
+
+		<!-------------------------------- Working Page -------------------------------->
+		<article id="working-page" class="card" hidden="true">
+
+			<!-- Top row -->
+			<section class="container">
+				<section class="category working">
+					Extracting data...
+					<img src="{{ url_for('static', filename='images/Loading_icon.gif') }}">
+				</section>
+			</section>
+
 		</article>
 
 	</body>
