@@ -5,8 +5,10 @@ import base64
 import cv2
 import io
 import numpy as np
+import torch
 
 from PIL import Image
+from transformers import DetrFeatureExtractor, TableTransformerForObjectDetection
 
 #
 # Convert image to data
@@ -31,6 +33,13 @@ def convertImage(page_image_string):
 
 	# Display image
 	binarized_image = Image.fromarray(binarized_array).convert("RGB")
+
+	# Segment table
+	table_location = segmentTable(binarized_image)
+	print(f"Table location: {table_location}")
+
+	# Identify table structure
+	column_boxes = identifyTableStructure(binarized_image, table_location)
 
 	# DEBUG: Write image to test file
 	page_image.save("test.png")
@@ -64,4 +73,31 @@ def global_adaptive_thresholding(image, height, width, depth):
 	# Apply Otsu thresholding
 	otsu_threshold, binarized_array = cv2.threshold(grayscale_image, 127, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
-	return binarized_array
+	return binarized_array# Segment table
+#
+# Segment table
+#
+def segmentTable(binarized_image):
+
+	# Instantiate model
+	table_model_location = TableTransformerForObjectDetection.from_pretrained("microsoft/table-transformer-detection")
+	
+	# Instantiate DETR model feature extractor
+	# https://arxiv.org/abs/2005.12872
+	image = binarized_image
+	feature_extractor = DetrFeatureExtractor()
+	encoding = feature_extractor(image, return_tensors="pt")
+
+	# Infer table location and structure
+	with torch.no_grad():
+		tl_outputs = table_model_location(**encoding)
+
+	width, height = image.size
+	location_results = feature_extractor.post_process_object_detection(tl_outputs, threshold=0.2, target_sizes=[(height, width)])[0]
+
+	# Extract table location
+	padding = 5
+	table_location = location_results["boxes"][0].tolist()
+	table_location = [table_location[0] - padding, table_location[1], table_location[2] + padding, table_location[3]]
+
+	return table_location
