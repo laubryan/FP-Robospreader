@@ -421,10 +421,15 @@ async function submitPage() {
 			// Display validation page
 			updatePageState(2);
 		}
+		else {
+			// Error
+			console.log(response);
+			window.location.href = "/error.html";
+		}
 	}).catch(error => {
 		// Error
-		console.log("Error");
 		console.log(response);
+		window.location.href = "/error.html";
 	});
 }
 

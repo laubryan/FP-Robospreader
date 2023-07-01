@@ -43,6 +43,16 @@ def uploadFile():
     return redirect("/choose-page")
 
 #
+# Errors
+#
+def app_error(e):
+    return render_template("error.html", pageData=_globalDefs)
+
+# Register error handlers
+app.register_error_handler(404, app_error)
+app.register_error_handler(500, app_error)
+
+#
 # API Methods
 #
 
@@ -54,6 +64,6 @@ def processPageImage():
     page_image_string = request.form.get("image-buffer", None)
 
     # Convert image to data
-    validation_data = processor.convertImage(page_image_string)
+    validation_data = processor.processImage(page_image_string)
 
     return { "validation_data": validation_data }
