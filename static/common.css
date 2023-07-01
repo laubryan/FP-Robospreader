@@ -121,6 +121,7 @@ label {
 
 /* Labels for statement line items */
 .line-item-label {
+	max-width: 24rem;
 	width: 24rem;
 }
 
@@ -197,7 +198,7 @@ row {
 	flex-direction: column;
 	font-size: 2em;
 	justify-content: center;
-	height: 25rem;
+	height: 30rem;
 }
 
 /* Processing animated icon */
