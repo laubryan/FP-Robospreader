@@ -9,6 +9,7 @@ import pytesseract
 import re
 import torch
 
+from io import BytesIO
 from PIL import Image
 from transformers import DetrFeatureExtractor, TableTransformerForObjectDetection
 
@@ -71,7 +72,7 @@ def processImage(page_image_string):
 	column_boxes = identifyTableStructure(binarized_image, table_location)
 
 	# Identify entire page text
-	page_text = identifyPageText(binarized_image)
+	page_text = identifyPageText(page_image)
 
 	# Extract first column text
 	first_column_text = extractFirstColumnText(page_text, table_location, column_boxes)
@@ -81,7 +82,7 @@ def processImage(page_image_string):
 	print(line_item_labels)
 
 	# Extract complete data elements
-	data_elements = extractLineItemElements(line_item_labels, page_text, column_boxes)
+	data_elements = extractLineItemElements(line_item_labels, page_text, column_boxes, page_image)
 	# print(data_elements)
 
 	# DEBUG: Write image to test file
@@ -101,8 +102,17 @@ def processImage(page_image_string):
 
 	# Assemble validation data
 	validation_data = []
+	base64_image_prefix = "data:image/png;base64,"
 	for element in data_elements["elements"]:
-		validation_data.append({"label": element["label"], "extracted_value": element["value"], "original_value": element["value"] })
+
+		# Convert cell image to base64
+		cell_image_buffer = BytesIO()
+		element["cell_image"].save(cell_image_buffer, format="PNG")
+		# base64_image_text = base64_image_prefix + base64.b64encode(cell_image_buffer.getvalue())
+		base64_image_string = base64_image_prefix + base64.b64encode(cell_image_buffer.getvalue()).decode("utf-8")
+
+		# Assemble data element
+		validation_data.append({"label": element["label"], "extracted_value": element["value"], "cell_image": base64_image_string })
 
 	# Return validation data
 	return validation_data
@@ -136,7 +146,7 @@ def extractLineItemElements(line_item_labels, text_data, column_boxes, page_imag
 	for fc_box in column_boxes:
 
 		# Extract elements
-		elements, num_extracted_values = extract_column_elements(fc_box, line_item_labels, text_data)
+		elements, num_extracted_values = extract_column_elements(fc_box, line_item_labels, text_data, page_image)
 		prospective_elements.append({ "elements": elements, "num_extracted_values": num_extracted_values })
 
 	# Prefer the leftmost column with at least half of the values
@@ -159,7 +169,7 @@ def extractLineItemElements(line_item_labels, text_data, column_boxes, page_imag
 #
 # Extract line elements for the designated column
 #
-def extract_column_elements(column_box, df_labels, df_page_ocr):
+def extract_column_elements(column_box, df_labels, df_page_ocr, page_image):
 
 	# Extract first column cells for each line item
 	elements = []
@@ -172,6 +182,9 @@ def extract_column_elements(column_box, df_labels, df_page_ocr):
 			(df_page_ocr["left"] >= int(column_box[0])) & ((df_page_ocr["right"]) <= int(column_box[2])) & \
 			(df_page_ocr["top"] >= int(row.top - v_tolerance)) & ((df_page_ocr["bottom"]) <= int(row.bottom + v_tolerance))
 		]
+
+		# Extract cell image
+		cell_image = page_image.crop((int(column_box[0]), row.top, int(column_box[2]), row.bottom))
 
 		# Only save value if it's not blank
 		if not val_pd.empty:
@@ -193,7 +206,7 @@ def extract_column_elements(column_box, df_labels, df_page_ocr):
 			cell_value = ""
 
 		# Save element data
-		element = { "label": row.text, "value": cell_value }
+		element = { "label": row.text, "value": cell_value, "cell_image": cell_image }
 		elements.append(element)
 
 	return elements, num_extracted_values

@@ -254,7 +254,7 @@ async function populateValidationData(response) {
 		let rowHtml = `
 		<row id="row-${i}" class="validation-row" data-index="row-${i}" data-label="${row.label}">
 			<span class='line-item-label'>${row.label}</span>
-			<img src="/static/images/debug-field-value.png">
+			<img src="${row.cell_image}" class="cell-image">
 			<button id="btn-play" type="button" title="Play"><img src="/static/images/play.png"></button>
 			<input type="number" value="${row.extracted_value}">
 			<button id="btn-delete" type="button" title="Delete" onclick="deleteRow(${i})"><img src="/static/images/delete.png"></button>

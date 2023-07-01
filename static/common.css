@@ -45,6 +45,11 @@ button:disabled {
 	width: 85%;
 }
 
+/* Cell image */
+.cell-image {
+	border: 1px solid gray;
+}
+
 /* Style for centered elements */
 .centered {
 	justify-content: center;
