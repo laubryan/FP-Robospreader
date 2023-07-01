@@ -66,6 +66,15 @@ function browseForFile() {
 				case "Better Life Pharama Inc - Jan 31 Oct 31 2022.pdf":
 					renderDocument(fileURI, 3);
 					return;
+				case "NextGen Food Robotics Corp - 2022-04-30 - 2023-01-31..pdf":
+					renderDocument(fileURI, 3);
+					return;
+				case "Rogers - Q1-2020.pdf":
+					renderDocument(fileURI, 4);
+					return;
+				case "Starbucks - Annual Report - 2020.pdf":
+					renderDocument(fileURI, 54);
+					return;
 			}
 
 			// Render document
