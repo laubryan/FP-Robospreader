@@ -33,6 +33,8 @@ function browseForFile() {
 	buttonNextSelect = document.getElementById("button-next-select");
 	buttonNextValidate = document.getElementById("page-next-validate");
 
+	fieldPageNumber.addEventListener("keypress", onPageNumberKeyPressed);
+
 	// Get and click file control
 	let fileControl = document.getElementById("file-control");
 	fileControl.click();
@@ -75,6 +77,9 @@ function browseForFile() {
 				case "Starbucks - Annual Report - 2020.pdf":
 					renderDocument(fileURI, 54);
 					return;
+				case "Tesla - December 31 2020.pdf":
+					renderDocument(fileURI, 54);
+					return;
 			}
 
 			// Render document
@@ -94,27 +99,38 @@ function changePageDelta(pageDelta) {
 	// Disable page controls
 	enablePageControls(false);
 	
+	// Change page number
+	changePageNumber(currentPageNumber + pageDelta);
+}
+
+//
+// Change page to new number
+//
+function changePageNumber(newPageNumber) {
+
+	// Only operate if PDF is cached
+	if (!cachedPDF) return;
+
 	// Adjust current page
 	let oldPageNumber = currentPageNumber;
-	currentPageNumber += pageDelta;
-	if (currentPageNumber < 1) {
-		currentPageNumber = 1;
+	if (newPageNumber < 1) {
+		newPageNumber = 1;
 	}
-	else if (currentPageNumber > cachedPDF.numPages) {
-		currentPageNumber = cachedPDF.numPages;
+	else if (newPageNumber > cachedPDF.numPages) {
+		newPageNumber = cachedPDF.numPages;
 	}
 
 	// No need to re-render if it's the same page
-	if (currentPageNumber == oldPageNumber) {
+	if (newPageNumber == oldPageNumber) {
 
 		// Enable page controls
 		enablePageControls(true);
 
 		// Selectively disable buttons at first/last page
-		if (currentPageNumber == 1) {
+		if (newPageNumber == 1) {
 			buttonPreviousPage.disabled = true;
 		}
-		else if (currentPageNumber >= cachedPDF.numPages) {
+		else if (newPageNumber >= cachedPDF.numPages) {
 			buttonNextPage.disabled = true;
 		}
 
@@ -123,7 +139,7 @@ function changePageDelta(pageDelta) {
 	}
 
 	// Display new page
-	displayTargetPage(cachedPDF, currentPageNumber);
+	displayTargetPage(cachedPDF, newPageNumber);
 }
 
 //
@@ -167,7 +183,9 @@ function displayNumPages(numPages) {
 //
 function displayTargetPage(pdf, pageNum) {
 
+
 	// Get the page
+	pageNum = parseInt(pageNum);
 	pdf.getPage(pageNum).then(page => {
 
 		// Render thumbnail
@@ -235,6 +253,26 @@ function getValidatedData() {
 	}
 
 	return dataElements;
+}
+
+//
+// Key pressed in page number field
+//
+function onPageNumberKeyPressed(e) {
+
+	// Only activate on Enter
+	if (e.key === "Enter") {
+		
+		// Get new number
+		let newPageNumber = fieldPageNumber.value;
+
+		// Change page number
+		changePageNumber(newPageNumber);
+
+		// But don't submit the form
+		e.preventDefault();
+		return false;
+	}
 }
 
 //
