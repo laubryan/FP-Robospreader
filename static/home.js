@@ -242,7 +242,7 @@ function getValidatedData() {
 
 		// Skip header row
 		if (rowElement.id != "header-row") {
-			
+
 			// Get row label
 			let rowLabel = rowElement.dataset.label;
 
