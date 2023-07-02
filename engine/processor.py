@@ -108,7 +108,11 @@ def createAudioString(cell_text):
 	# Define base64 audio prefix
 	base64_audio_prefix = "data:audio/mp3;base64,"
 
+	# Remember negative numbers
+	negative = False
 	normalized_text = cell_text.strip()
+	if normalized_text.startswith("(") and normalized_text.endswith(")"):
+		negative = True
 
 	# Prep cell text
 	normalized_text = re.sub(r"[(), ]", "", cell_text) # Remove non-read chars
@@ -119,6 +123,11 @@ def createAudioString(cell_text):
 
 		# Space out characters
 		normalized_text = " ".join(normalized_text)
+
+		# Say special words
+		normalized_text = normalized_text.replace(".", "point") # Decimal point
+		if negative:
+			normalized_text = "minus " + normalized_text # Negative
 
 		# Convert text to speech
 		cell_audio = gTTS(text=normalized_text, lang="en", slow=True)
