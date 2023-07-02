@@ -79,7 +79,6 @@ def processImage(page_image_string):
 
 	# Identify line item labels
 	line_item_labels = identifyLineItemLabels(first_column_text)
-	print(line_item_labels)
 
 	# Extract complete data elements
 	data_elements = extractLineItemElements(line_item_labels, page_text, column_boxes, page_image)
