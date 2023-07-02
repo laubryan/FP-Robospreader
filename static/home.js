@@ -238,6 +238,16 @@ function getValidatedData() {
 }
 
 //
+// Play audio sample
+//
+function playAudio(rowIndex) {
+
+	// Get audio control reference
+	let audioSample = document.getElementById("audio-" + rowIndex)
+	audioSample.play();
+}
+
+//
 // Populate validation data
 //
 async function populateValidationData(response) {
@@ -267,7 +277,8 @@ async function populateValidationData(response) {
 		<row id="row-${i}" class="validation-row" data-index="row-${i}" data-label="${row.label}">
 			<span class='line-item-label'>${row.label}</span>
 			<img src="${row.cell_image}" class="cell-image">
-			<button id="btn-play" type="button" title="Play"><img src="/static/images/play.png"></button>
+			<button id="btn-play" type="button" title="Play" onclick="playAudio(${i})" ${row.audio ? "" : "disabled"}><img src="/static/images/play.png"></button>
+			<audio id="audio-${i}" autobuffer="autobuffer"><source src="${row.audio}"/></audio>
 			<input type="number" value="${row.extracted_value}">
 			<button id="btn-delete" type="button" title="Delete" onclick="deleteRow(${i})"><img src="/static/images/delete.png"></button>
 		</row>

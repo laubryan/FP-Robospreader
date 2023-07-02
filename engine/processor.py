@@ -9,6 +9,7 @@ import pytesseract
 import re
 import torch
 
+from gtts import gTTS
 from io import BytesIO
 from PIL import Image
 from transformers import DetrFeatureExtractor, TableTransformerForObjectDetection
@@ -85,19 +86,55 @@ def processImage(page_image_string):
 
 	# Assemble validation data
 	validation_data = []
-	base64_image_prefix = "data:image/png;base64,"
 	for element in data_elements["elements"]:
 
-		# Convert cell image to base64
-		cell_image_buffer = BytesIO()
-		element["cell_image"].save(cell_image_buffer, format="PNG")
-		base64_image_string = base64_image_prefix + base64.b64encode(cell_image_buffer.getvalue()).decode("utf-8")
+		# Convert cell to base64 image
+		cell_image_string = createImageString(element["cell_image"])
+
+		# Convert cell  to base64 audio
+		cell_audio_string = createAudioString(element["value"])
 
 		# Assemble data element
-		validation_data.append({"label": element["label"], "extracted_value": element["value"], "cell_image": base64_image_string })
+		validation_data.append({"label": element["label"], "extracted_value": element["value"], "cell_image": cell_image_string, "audio": cell_audio_string })
 
 	# Return validation data
 	return validation_data
+
+#
+# Convert cell text to base64 audio string
+#
+def createAudioString(cell_text):
+
+	# Define base64 audio prefix
+	base64_audio_prefix = "data:audio/mp3;base64,"
+
+	# Convert text to audio
+	base64_audio_string = ""
+	if cell_text.strip():
+		cell_audio = gTTS(text=cell_text, lang="en", slow=True)
+
+		# Convert audio to base64
+		audio_buffer = BytesIO()
+		cell_audio.write_to_fp(audio_buffer)
+		audio_buffer.seek(0)
+		base64_audio_string = base64_audio_prefix + base64.b64encode(audio_buffer.read()).decode("utf-8")
+
+	return base64_audio_string
+
+#
+# Convert image to base64 string
+#
+def createImageString(cell_image):
+
+	# Define base64 image prefix
+	base64_image_prefix = "data:image/png;base64,"
+
+	# Convert image to base64 string
+	cell_image_buffer = BytesIO()
+	cell_image.save(cell_image_buffer, format="PNG")
+	base64_image_string = base64_image_prefix + base64.b64encode(cell_image_buffer.getvalue()).decode("utf-8")
+
+	return base64_image_string
 
 #
 # Extract text contained in leftmost column
@@ -195,6 +232,8 @@ def extract_column_elements(column_box, df_labels, df_page_ocr, page_image):
 
 			# Add value if not empty
 			if cell_value.strip() != "":
+
+				print(f"Cell value: {cell_value}")
 
 				# Count extracted value
 				num_extracted_values += 1
