@@ -240,19 +240,23 @@ function getValidatedData() {
 	let container = document.getElementById("validation-content");
 	for (rowElement of container.children) {
 
-		// Get row label
-		let rowLabel = rowElement.dataset.label;
+		// Skip header row
+		if (rowElement.id != "header-row") {
+			
+			// Get row label
+			let rowLabel = rowElement.dataset.label;
 
-		// Get row value
-		let valueField = rowElement.querySelector("input[type='text']");
-		let rowValue = "";
-		if (valueField) {
-			rowValue = valueField.value;
+			// Get row value
+			let valueField = rowElement.querySelector("input[type='text']");
+			let rowValue = "";
+			if (valueField) {
+				rowValue = valueField.value;
+			}
+
+			// Add element to list
+			let dataElement = { "label": rowLabel, "value": rowValue }
+			dataElements.push(dataElement);
 		}
-
-		// Add element to list
-		let dataElement = { "label": rowLabel, "value": rowValue }
-		dataElements.push(dataElement);
 	}
 
 	return dataElements;
@@ -311,7 +315,7 @@ async function populateValidationData(response) {
 	// Add row headers
 	let container = document.getElementById("validation-content")
 	let headerHtml = `
-	<row class="header-row">
+	<row id="header-row" class="header-row">
 		<span class="line-item-label">&nbsp;</span>
 		<span class="header-label">Original Value</span>
 		<span class="header-label">Extracted Value</span>
