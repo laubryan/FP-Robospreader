@@ -233,8 +233,6 @@ def extract_column_elements(column_box, df_labels, df_page_ocr, page_image):
 			# Add value if not empty
 			if cell_value.strip() != "":
 
-				print(f"Cell value: {cell_value}")
-
 				# Count extracted value
 				num_extracted_values += 1
 
