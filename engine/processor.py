@@ -108,10 +108,17 @@ def createAudioString(cell_text):
 	# Define base64 audio prefix
 	base64_audio_prefix = "data:audio/mp3;base64,"
 
+	normalized_text = cell_text.strip()
+
+	# Prep cell text
+	normalized_text = re.sub(r"[(), ]", "", cell_text) # Remove non-read chars
+
 	# Convert text to audio
 	base64_audio_string = ""
-	if cell_text.strip():
-		cell_audio = gTTS(text=cell_text, lang="en", slow=True)
+	if normalized_text:
+
+		# Convert text to speech
+		cell_audio = gTTS(text=normalized_text, lang="en", slow=True)
 
 		# Convert audio to base64
 		audio_buffer = BytesIO()
