@@ -124,7 +124,8 @@ def createAudioString(cell_text):
 		normalized_text = " ".join(normalized_text)
 
 		# Say special words
-		normalized_text = normalized_text.replace(".", "point") # Decimal point
+		normalized_text = normalized_text.replace(".", "point")	# Decimal point
+		normalized_text = normalized_text.replace("0", "zero")	# Zero
 		if negative:
 			normalized_text = "minus " + normalized_text # Negative
 
