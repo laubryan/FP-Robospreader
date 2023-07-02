@@ -244,8 +244,11 @@ function getValidatedData() {
 		let rowLabel = rowElement.dataset.label;
 
 		// Get row value
-		let valueField = rowElement.querySelector("input[type='number']");
-		let rowValue = valueField.value;
+		let valueField = rowElement.querySelector("input[type='text']");
+		let rowValue = "";
+		if (valueField) {
+			rowValue = valueField.value;
+		}
 
 		// Add element to list
 		let dataElement = { "label": rowLabel, "value": rowValue }
