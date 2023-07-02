@@ -117,6 +117,9 @@ def createAudioString(cell_text):
 	base64_audio_string = ""
 	if normalized_text:
 
+		# Space out characters
+		normalized_text = " ".join(normalized_text)
+
 		# Convert text to speech
 		cell_audio = gTTS(text=normalized_text, lang="en", slow=True)
 
