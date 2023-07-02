@@ -142,6 +142,17 @@ def extractLineItemElements(line_item_labels, text_data, column_boxes, page_imag
 	if best_values == None:
 		best_values = sorted(prospective_elements, key=lambda x: x["num_extracted_values"], reverse=True)[0]
 
+	# DEBUG: Dummy validation data
+	# validation_data = [
+	# 		{ "label": "Short-term investments", "extracted_value": "3799", "original_value": "3799" },
+	# 		{ "label": "Accounts receivable", "extracted_value": "926", "original_value": "926" },
+	# 		{ "label": "Total current assets", "extracted_value": "7516", "original_value": "7516" },
+	# 		{ "label": "Investments deposits and other assets", "extracted_value": "936", "original_value": "936" },
+	# 		{ "label": "Deferred income tax", "extracted_value": "134", "original_value": "134" },
+	# 		{ "label": "Total current liabilities", "extracted_value": "7775", "original_value": "7775" },
+	# 		{ "label": "Total shareholders equity", "extracted_value": "4400", "original_value": "4400" },
+	# ]
+
 	return best_values
 
 #
