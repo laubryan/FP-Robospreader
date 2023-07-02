@@ -67,6 +67,8 @@ def processImage(page_image_string):
 
 	# Segment table
 	table_location = segmentTable(binarized_image)
+	if table_location == None:
+		return None
 
 	# Identify table structure
 	column_boxes = identifyTableStructure(binarized_image, table_location)
@@ -428,6 +430,11 @@ def segmentTable(binarized_image):
 
 	width, height = image.size
 	location_results = feature_extractor.post_process_object_detection(tl_outputs, threshold=0.2, target_sizes=[(height, width)])[0]
+
+	# No table detected
+	num_table_boxes = len(location_results['boxes'])
+	if num_table_boxes == 0:
+		return None
 
 	# Extract table location
 	padding = 5
