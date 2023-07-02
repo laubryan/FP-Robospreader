@@ -186,6 +186,14 @@ def extract_column_elements(column_box, df_labels, df_page_ocr, page_image):
 
 			# Take the first value
 			cell_value = cell_values[0]
+
+			# Strip mismatched parentheses
+			if "(" in cell_value and ")" not in cell_value:
+				cell_value = cell_value.replace("(", "")
+			elif "(" not in cell_value and ")" in cell_value:
+				cell_value = cell_value.replace(")", "")
+
+			# Add value if not empty
 			if cell_value.strip() != "":
 
 				# Count extracted value
