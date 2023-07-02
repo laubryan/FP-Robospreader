@@ -42,7 +42,7 @@ button:disabled {
 	box-shadow: 4px 4px 3px #aaa5;
 	margin: 0.3rem 0.3rem 0.8rem 0.3rem;
 	padding: 0.8rem;
-	width: 85%;
+	width: 100%;
 }
 
 /* Cell image */
@@ -77,7 +77,7 @@ fieldset {
 footer {
 	display: flex;
 	justify-content: space-between;
-	width: 88%;
+	width: 100%;
 }
 footer.solo {
 	justify-content: end;
@@ -104,7 +104,7 @@ h2 {
 
 /* Split screen card modifier */
 .half {
-	width: 41%;
+	width: 48%;
 }
 
 /* Header labels for validation rows */
