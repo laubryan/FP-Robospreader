@@ -246,8 +246,20 @@ async function populateValidationData(response) {
 	let jsonData = await response.json();
 	let validationData = jsonData["validation_data"];
 
-	// Render rows
+	// Add row headers
 	let container = document.getElementById("validation-content")
+	let headerHtml = `
+	<row class="header-row">
+		<span class="line-item-label">&nbsp;</span>
+		<span class="header-label">Original Value</span>
+		<span class="header-label">Extracted Value</span>
+	</row>
+	`;
+	let headerElement = document.createElement("template")
+	headerElement.innerHTML = headerHtml;
+	container.appendChild(headerElement.content);
+
+	// Render rows
 	for (const[i, row] of validationData.entries()) {
 
 		// Define row HTML

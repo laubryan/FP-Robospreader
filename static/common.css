@@ -106,6 +106,14 @@ h2 {
 	width: 41%;
 }
 
+/* Header labels for validation rows */
+.header-label {
+	font-weight: bold;
+	margin-right: 3.7rem;
+	text-align: right;
+	width: 10rem;
+}
+
 /* Labels */
 label {
 	font-weight: bold;
