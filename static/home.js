@@ -279,7 +279,7 @@ async function populateValidationData(response) {
 			<img src="${row.cell_image}" class="cell-image">
 			<button id="btn-play" type="button" title="Play" onclick="playAudio(${i})" ${row.audio ? "" : "disabled"}><img src="/static/images/play.png"></button>
 			<audio id="audio-${i}" autobuffer="autobuffer"><source src="${row.audio}"/></audio>
-			<input type="number" value="${row.extracted_value}">
+			<input type="text" value="${row.extracted_value}">
 			<button id="btn-delete" type="button" title="Delete" onclick="deleteRow(${i})"><img src="/static/images/delete.png"></button>
 		</row>
 		`;

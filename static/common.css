@@ -190,7 +190,7 @@ row {
 .validation-row #btn-delete {
 	margin-left: 2rem;
 }
-.validation-row input[type="number"] {
+.validation-row input[type="text"] {
 	height: 2.3em;
 	text-align: right;
 }
