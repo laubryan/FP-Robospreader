@@ -1,5 +1,6 @@
 # Custom
 debug/
+demo/
 model*/
 node_modules/*
 processed_data/
