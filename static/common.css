@@ -48,6 +48,7 @@ button:disabled {
 /* Cell image */
 .cell-image {
 	border: 1px solid gray;
+	z-index: 10;
 }
 
 /* Style for centered elements */
