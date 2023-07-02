@@ -130,7 +130,7 @@ def createAudioString(cell_text):
 			normalized_text = "minus " + normalized_text # Negative
 
 		# Convert text to speech
-		cell_audio = gTTS(text=normalized_text, lang="en", slow=True)
+		cell_audio = gTTS(text=normalized_text, lang="en", slow=False)
 
 		# Convert audio to base64
 		audio_buffer = BytesIO()
