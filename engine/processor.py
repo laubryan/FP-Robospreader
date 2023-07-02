@@ -284,8 +284,9 @@ def identifyLineItemLabels(text_data):
 	# Drop non-essential columns
 	line_item_labels_pd.drop(columns=["par_num", "line_num"], inplace=True)
 
-	# Drop labels that are too long to be realistic
-	line_item_labels_pd = line_item_labels_pd[line_item_labels_pd["width"] < 250]
+	# Apply additional label filtering
+	line_item_labels_pd = line_item_labels_pd[line_item_labels_pd["width"] < 250] # Too long
+	line_item_labels_pd = line_item_labels_pd[line_item_labels_pd["text"] != ""]	# Blank
 	line_item_labels_pd.reset_index(inplace=True)
 
 	# Compute peak left margins
