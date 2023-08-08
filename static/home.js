@@ -65,7 +65,7 @@ function browseForFile() {
 				case "BCE - Financial Report - 2020-2022.pdf":
 					renderDocument(fileURI, 83);
 					return;
-				case "Better Life Pharama Inc - Jan 31 Oct 31 2022.pdf":
+				case "Better Life Pharma Inc - Jan 31 Oct 31 2022.pdf":
 					renderDocument(fileURI, 3);
 					return;
 				case "NextGen Food Robotics Corp - 2022-04-30 - 2023-01-31..pdf":
@@ -192,7 +192,7 @@ function displayTargetPage(pdf, pageNum) {
 		renderPageToCanvas(page, "pdf-view", 300, false);
 
 		// Render hidden full view
-		renderPageToCanvas(page, "image-full-view", 1024, true);
+		renderPageToCanvas(page, "image-full-view", 1536, true);
 
 		// Display current page number
 		currentPageNumber = pageNum;
@@ -326,7 +326,7 @@ async function populateValidationData(response) {
 	container.appendChild(headerElement.content);
 
 	// Render rows
-	for (const[i, row] of validationData.entries()) {
+	for (const [i, row] of validationData.entries()) {
 
 		// Define row HTML
 		let rowHtml = `
@@ -347,6 +347,11 @@ async function populateValidationData(response) {
 		// Add row to container
 		container.appendChild(rowElement.content);
 	}
+
+	// Append row count
+	let rowCount = document.createElement("template");
+	rowCount.innerHTML = `<span>${validationData.length} rows</span>`;
+	container.appendChild(rowCount.content);
 }
 
 //

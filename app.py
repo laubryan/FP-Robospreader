@@ -63,7 +63,10 @@ def processPageImage():
     # Get image buffer string from client
     page_image_string = request.form.get("image-buffer", None)
 
+    # Convert image string to image
+    page_image = processor.convert_image_string(page_image_string)
+
     # Convert image to data
-    validation_data = processor.processImage(page_image_string)
+    validation_data = processor.process_image(page_image)
 
     return { "validation_data": validation_data }
