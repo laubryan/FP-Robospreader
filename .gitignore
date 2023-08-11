@@ -7,6 +7,7 @@ processed_data/
 statements/
 
 *.bat
+*.db
 *.json
 *.pdf
 *.png
