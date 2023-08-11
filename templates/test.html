@@ -1,21 +1,136 @@
 <html>
 	<head>
 		<title>Document Extraction Validation Test</title>
-		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='common.css') }}">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/common.css') }}">
 	</head>
 	<body>
 
 		<!-- Header Title -->
 		<h1><img src="{{ url_for('static', filename='images/robospreader.png') }}">Document Extraction Validation Test</h1>
 
-		<!-------------------------------- Content -------------------------------->
+		<!-------------------------------- Intro -------------------------------->
 		<article id="choose-page" class="card">
 			<section class="container">
 				<section class="category">
-					Content goes here
+					<h2>{% block title %}Welcome{% endblock %}</h2>
+					<p>Thank you for participating in this validation test!</p>
+					<p>There are two distinct parts to this test:</p>
+					<ol>
+						<li>Manual Transcription</li>
+						<li>Automatic Transcription</li>
+					</ol>
+					<p>In the Manual Transcription Test you will be required to copy numbers into the fields provided.</p>
+					<p>In the Automatic Transcription Test you will validate that the fields contain correct numbers.</p>
+					<br>
+					<p>Click <strong>Next</strong> to continue.</p>
 				</section>
 			</section>
+
+			<!-- Bottom row -->
+			<footer class="solo">
+				<button id="button-next" type="button" onclick="">Next</button>
+			</footer>
 		</article>
 
+		<!-------------------------------- Manual Intro -------------------------------->
+		<article id="validate-results" class="card">
+			<form method="POST" enctype="multipart/form-data">
+
+				<!-- Top row -->
+				<section class="container">
+					<section class="category">
+						<h2>1. Manual Transcription Test</h2>
+						<p>In this test you will be presented with a financial statement.</p>
+						<p>Your task is to:</p>
+						<ol>
+							<li>Copy the values from all matching line items to their appropriate fields.</li>
+							<li>Click Done when all the fields have been filled in.</li>
+						</ol>
+						<p>This test will be timed.</p>
+						<p>Click <strong>Start the Test</strong> when ready.</p>
+					</section>
+				</section>
+
+			<!-- Bottom row -->
+			<footer class="solo">
+				<button id="button-next" type="button" onclick="">Start the Test</button>
+			</footer>
+			</form>
+		</article>
+
+		<!-------------------------------- Manual Test -------------------------------->
+		<article id="validate-results" class="card">
+			<form method="POST" enctype="multipart/form-data">
+
+				<!-- Top row -->
+				<section class="container">
+					<section class="category">
+						<h2>1. Manual Transcription Test</h2>
+						<p>Your task is to:</p>
+						<ol>
+							<li>Copy the values from all matching line items to their appropriate fields.</li>
+							<li>Click Done when all the fields have been filled in.</li>
+						</ol>
+					</section>
+				</section>
+
+				<!-- Content Row -->
+				<section class="container">
+
+					<!-- Financial Statement -->
+					<section class="category threequarter">
+						<row class="centered">
+							<image src="{{ url_for('static', filename='images/test/financial-statement.png') }}" class="image-fit">
+						</row>
+					</section>
+
+					<!-- Validation Fields -->
+					<section class="category onequarter">
+						<row class="centered">
+							<row id="row-0" class="validation-row" data-index="row-0" data-label="Current assets">
+								<span class='line-item-label test'>Current assets</span>
+								<input class="test" type="text" value="590.3">
+							</row>
+						</row>
+					</section>
+				</section>
+
+				<!-- Bottom row -->
+				<footer class="solo">
+					<button id="button-next" type="button" onclick="">Start the Test</button>
+				</footer>
+			</form>
+		</article>
+
+		<!-------------------------------- Automatic Intro -------------------------------->
+		<article id="validate-results" class="card">
+			<form method="POST" enctype="multipart/form-data">
+
+				<!-- Top row -->
+				<section class="container">
+					<section class="category">
+						<h2>2. Automatic Transcription Test</h2>
+						<p>
+							In this test you will be presented with a set of images cropped from a financial statement, 
+							and their automatically transcribed values.
+						</p>
+						<p>Your task is to:</p>
+						<ol>
+							<li>Compare the cell image to the transcribed value.</li>
+							<li>If the values don't match, make corrections to the value in the text field.</li>
+							<li>Click Done when all the fields have been validated.</li>
+						</ol>
+						<p>This test will be timed.</p>
+						<p>Click <strong>Start the Test</strong> when ready.</p>
+					</section>
+				</section>
+
+			<!-- Bottom row -->
+			<footer class="solo">
+				<button id="button-next" type="button" onclick="">Start the Test</button>
+			</footer>
+			</form>
+		</article>
+		
 	</body>
 </html>
