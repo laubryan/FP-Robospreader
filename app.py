@@ -21,26 +21,10 @@ _globalDefs = {
 def pageHome():
     return render_template("home.html", pageData=_globalDefs)
 
-# Choose Page
-@app.route("/choose-page", methods=["POST"])
-def choosePage():
-    return render_template("choose-page.html", pageData=_globalDefs)
-
-# Upload file
-@app.route("/upload-file", methods=["POST"])
-def uploadFile():
-    # Get uploaded file
-    uploadedFile = request.files["file"]
-    print(uploadedFile)
-
-    # Save file
-    # TODO: Create unique filename
-    if uploadedFile.filename != "":
-        uploadedFile.save(uploadedFile.filename)
-
-    # TODO: Store filename in session
-    
-    return redirect("/choose-page")
+# Test
+@app.route("/test", methods=["GET"])
+def pageTest():
+    return render_template("test.html", pageData=_globalDefs)
 
 #
 # Errors
