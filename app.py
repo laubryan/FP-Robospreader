@@ -1,3 +1,6 @@
+import sqlite3
+
+from db import db
 from engine import processor
 from flask import Flask, request, render_template, redirect
 
@@ -9,7 +12,8 @@ app.config["UPLOAD_EXTENSIONS"] = [".pdf"]
 
 # Global Definitions
 _globalDefs = {
-    "appname": "RoboSpreader"
+    "appname": "RoboSpreader",
+    "db": sqlite3.connect("db/test.db")
 }
 
 #
@@ -25,6 +29,13 @@ def pageHome():
 @app.route("/test", methods=["GET"])
 def pageTest():
     return render_template("test.html", pageData=_globalDefs)
+
+# Initialize (DEV ONLY)
+@app.route("/initialize", methods=["GET"])
+def initialize():
+    data = db.initialize()
+    print(data)
+    return render_template("status.html", pageData=_globalDefs)
 
 #
 # Errors
