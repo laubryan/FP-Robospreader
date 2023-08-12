@@ -10,6 +10,11 @@ def open_db():
 
 	# Connect/create database
 	db_conn = sqlite3.connect("db/test.db")
+
+	# Configure row dictionaries
+	db_conn.row_factory = sqlite3.Row
+
+	# Get db cursor
 	db_cur = db_conn.cursor()
 
 	return db_conn, db_cur
@@ -53,3 +58,33 @@ def get_table(table_name, cur=None):
 	table_data = { "name": table_name, "rows": table_rows }
 
 	return table_data
+
+#
+# Get Test 1 data
+#
+def get_test1():
+
+	# Connect to db if required
+	db_conn, db_cur = open_db()
+
+	# Get table rows
+	table_rows = []
+	db_cur.execute(f"select f.name, f.actual_value from tests t, fields f where t.test_id = 1 and t.field_id = f.id")
+	table_rows = db_cur.fetchall()
+
+	return table_rows
+
+#
+# Get Test 2 data
+#
+def get_test2():
+
+	# Connect to db if required
+	db_conn, db_cur = open_db()
+
+	# Get table rows
+	table_rows = []
+	db_cur.execute(f"select f.id, f.name, f.actual_value, f.extracted_value from tests t, fields f where t.test_id = 2 and t.field_id = f.id")
+	table_rows = db_cur.fetchall()
+
+	return table_rows

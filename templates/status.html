@@ -14,7 +14,9 @@
 						<h2>{{table["name"]}}</h2>
 						{% for row in table["rows"] %}
 							<row>
-								<span>{{row}}</span>
+								{% for field in row %}
+								<span>{{field}}</span>&nbsp;
+								{% endfor %}
 							</row>
 						{% endfor %}
 					{% endfor %}

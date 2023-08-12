@@ -107,10 +107,10 @@ h2 {
 	width: 48%;
 }
 .onequarter {
-	width: 30%;
+	width: 36%;
 }
 .threequarter {
-	width: 66%;
+	width: 60%;
 }
 
 /* Header labels for validation rows */
@@ -155,8 +155,8 @@ li {
 	width: 24rem;
 }
 .line-item-label.test {
-	max-width: 13rem;
-	width: 13rem;
+	padding-right: 1rem;
+	width: 100%;
 }
 
 /* Generic text */

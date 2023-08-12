@@ -28,7 +28,9 @@ def pageHome():
 # Test
 @app.route("/test", methods=["GET"])
 def pageTest():
-    return render_template("test.html", pageData=_globalDefs)
+    test1_data = db.get_test1()
+    test2_data = db.get_test2()
+    return render_template("test.html", pageData=_globalDefs, test1_data=test1_data, test2_data=test2_data)
 
 # Initialize (DEV ONLY)
 @app.route("/initialize", methods=["GET"])

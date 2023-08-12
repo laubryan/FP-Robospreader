@@ -87,17 +87,21 @@
 					<!-- Validation Fields -->
 					<section class="category onequarter">
 						<row class="centered">
-							<row id="row-0" class="validation-row" data-index="row-0" data-label="Current assets">
-								<span class='line-item-label test'>Current assets</span>
-								<input class="test" type="text" value="590.3">
-							</row>
+							<section id="validation-content">
+								{% for row in test1_data %}
+								<row id="row-0" class="validation-row" data-index="row-0" data-label="Current assets">
+									<span class='line-item-label test'>{{row["name"]}}</span>
+									<input class="test" type="text" value="">
+								</row>
+								{% endfor %}
+							</section>
 						</row>
 					</section>
 				</section>
 
 				<!-- Bottom row -->
 				<footer class="solo">
-					<button id="button-next" type="button" onclick="">Start the Test</button>
+					<button id="button-next" type="button" onclick="">Done</button>
 				</footer>
 			</form>
 		</article>
@@ -132,5 +136,48 @@
 			</form>
 		</article>
 		
+		<!-------------------------------- Automatic Test -------------------------------->
+		<article id="validate-results" class="card">
+			<form method="POST" enctype="multipart/form-data">
+
+				<!-- Top row -->
+				<section class="container">
+					<section class="category">
+						<h2>2. Automatic Transcription Test</h2>
+						<p>Your task is to:</p>
+						<ol>
+							<li>Compare the cell image to the transcribed value.</li>
+							<li>Fix any values that don't match.</li>
+							<li>Click Done when all the fields have been validated.</li>
+						</ol>
+					</section>
+				</section>
+
+				<!-- Content Row -->
+				<section class="container">
+
+					<!-- Validation Fields -->
+					<section class="category">
+						<row class="centered">
+							<section id="validation-content">
+								{% for row in test2_data %}
+								<row id="row-0" class="validation-row" data-index="row-0" data-label="Current assets">
+									<span class='line-item-label test'>{{row["name"]}}</span>
+									<img id="cell-image-{{row['id']}}" src="/static/images/test/cell-image-{{row['id']}}.png" class="cell-image">
+									<input class="test" type="text" value="{{row['extracted_value']}}">
+								</row>
+								{% endfor %}
+							</section>
+						</row>
+					</section>
+				</section>
+
+				<!-- Bottom row -->
+				<footer class="solo">
+					<button id="button-next" type="button" onclick="">Done</button>
+				</footer>
+			</form>
+		</article>
+
 	</body>
 </html>
