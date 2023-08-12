@@ -9,8 +9,15 @@
 		<article id="choose-page" class="card">
 			<section class="container">
 				<section class="category">
-					<h2>Status</h2>
-					<p>Nothing</p>
+					<h1>Tables</h1>
+					{% for table in tables %}
+						<h2>{{table["name"]}}</h2>
+						{% for row in table["rows"] %}
+							<row>
+								<span>{{row}}</span>
+							</row>
+						{% endfor %}
+					{% endfor %}
 				</section>
 			</section>
 		</article>

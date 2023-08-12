@@ -31,23 +31,25 @@ def initialize():
 		# Create fields table
 		db_cur.executescript(setup_sql)
 
-		# Status
-		data = fields(db_cur)
-	
 	finally:
 		# Close the database
 		db_conn.close()
 
-	return data
-
 #
 # Get fields
 #
-def fields(cur):
+def get_table(table_name, cur=None):
 
-	# Get fields
-	fields = []
-	cur.execute("select * from fields")
-	fields = cur.fetchall()
+	# Connect to db if required
+	if not cur:
+		db_conn, db_cur = open_db()
 
-	return fields
+	# Get table rows
+	table_rows = []
+	db_cur.execute(f"select * from {table_name}")
+	table_rows = db_cur.fetchall()
+
+	# Package table data
+	table_data = { "name": table_name, "rows": table_rows }
+
+	return table_data

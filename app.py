@@ -33,9 +33,9 @@ def pageTest():
 # Initialize (DEV ONLY)
 @app.route("/initialize", methods=["GET"])
 def initialize():
-    data = db.initialize()
-    print(data)
-    return render_template("status.html", pageData=_globalDefs)
+    db.initialize()
+    table_data = [db.get_table("fields"), db.get_table("tests")]
+    return render_template("status.html", pageData=_globalDefs, tables=table_data)
 
 #
 # Errors
