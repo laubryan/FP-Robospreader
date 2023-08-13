@@ -1,6 +1,7 @@
 <html>
 	<head>
 		<title>Document Extraction Validation Test</title>
+		<script src="{{ url_for('static', filename='scripts/test.js') }}"></script>
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/common.css') }}">
 	</head>
 	<body>
@@ -164,6 +165,8 @@
 								<row id="row-0" class="validation-row" data-index="row-0" data-label="Current assets">
 									<span class='line-item-label test'>{{row["name"]}}</span>
 									<img id="cell-image-{{row['id']}}" src="/static/images/test/cell-image-{{row['id']}}.png" class="cell-image">
+									<button id="btn-play" type="button" title="Play" onclick="playAudio({{row['id']}})" {{ "" if row["audio"] else "disabled" }}><img src="/static/images/play.png"></button>
+									<audio id="audio-{{row['id']}}" autobuffer="autobuffer"><source src="{{row['audio']}}"/></audio>
 									<input class="test" type="text" value="{{row['extracted_value']}}">
 								</row>
 								{% endfor %}

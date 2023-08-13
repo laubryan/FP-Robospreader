@@ -6,7 +6,7 @@ create table fields(
 	id integer primary key,
 	name text not null,
 	actual_value real,
-	extracted_value real
+	extracted_value text
 	);
 
 /* Populate fields for Test 1 */

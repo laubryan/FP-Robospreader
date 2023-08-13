@@ -477,7 +477,7 @@ def process_image(page_image):
 		# Convert cell to base64 image
 		cell_image_string = create_image_string(element["cell_image"])
 
-		# Convert cell  to base64 audio
+		# Convert cell to base64 audio
 		cell_audio_string = create_audio_string(element["value"])
 
 		# Assemble data element

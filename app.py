@@ -2,6 +2,7 @@ import sqlite3
 
 from db import db
 from engine import processor
+from engine import test
 from flask import Flask, request, render_template, redirect
 
 app = Flask(__name__)
@@ -28,8 +29,10 @@ def pageHome():
 # Test
 @app.route("/test", methods=["GET"])
 def pageTest():
-    test1_data = db.get_test1()
-    test2_data = db.get_test2()
+
+    # Get test data
+    test1_data, test2_data = test.get_test_data()
+    
     return render_template("test.html", pageData=_globalDefs, test1_data=test1_data, test2_data=test2_data)
 
 # Initialize (DEV ONLY)

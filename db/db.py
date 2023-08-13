@@ -4,6 +4,15 @@
 import sqlite3
 
 #
+# Custom row factory
+#
+# - From: https://docs.python.org/3/library/sqlite3.html#sqlite3-howto-row-factory
+#
+def dict_factory(cursor, row):
+	fields = [column[0] for column in cursor.description]
+	return {key: value for key, value in zip(fields, row)}
+
+#
 # Open db and get cursor
 #
 def open_db():
@@ -12,7 +21,8 @@ def open_db():
 	db_conn = sqlite3.connect("db/test.db")
 
 	# Configure row dictionaries
-	db_conn.row_factory = sqlite3.Row
+	#db_conn.row_factory = sqlite3.Row
+	db_conn.row_factory = dict_factory
 
 	# Get db cursor
 	db_cur = db_conn.cursor()
