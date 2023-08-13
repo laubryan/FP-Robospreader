@@ -62,14 +62,17 @@ def create_audio_string(cell_text):
 	base64_audio_string = ""
 	if normalized_text:
 
-		# Space out characters
-		normalized_text = " ".join(normalized_text)
+		# Don't separate small numbers
+		if len(normalized_text) > 2:
 
-		# Say special words
-		normalized_text = normalized_text.replace(".", "point")	# Decimal point
-		normalized_text = normalized_text.replace("0", "zero")	# Zero
-		if negative:
-			normalized_text = "minus " + normalized_text # Negative
+			# Space out characters
+			normalized_text = " ".join(normalized_text)
+
+			# Say special words
+			normalized_text = normalized_text.replace(".", "point")	# Decimal point
+			normalized_text = normalized_text.replace("0", "zero")	# Zero
+			if negative:
+				normalized_text = "minus " + normalized_text # Negative
 
 		# Convert text to speech
 		cell_audio = gTTS(text=normalized_text, lang="en", slow=False)
