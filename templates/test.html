@@ -162,7 +162,7 @@
 						<row class="centered">
 							<section id="validation-content">
 								{% for row in test2_data %}
-								<row id="row-0" class="validation-row" data-index="row-0" data-label="Current assets">
+								<row id="row-{{row['id']}}" class="validation-row" data-label="Current assets">
 									<span class='line-item-label test'>{{row["name"]}}</span>
 									<img id="cell-image-{{row['id']}}" src="/static/images/test/cell-image-{{row['id']}}.png" class="cell-image">
 									<button id="btn-play" type="button" title="Play" onclick="playAudio({{row['id']}})" {{ "" if row["audio"] else "disabled" }}><img src="/static/images/play.png"></button>
@@ -179,6 +179,22 @@
 				<footer class="solo">
 					<button id="button-next" type="button" onclick="">Done</button>
 				</footer>
+			</form>
+		</article>
+
+		<!-------------------------------- End -------------------------------->
+		<article id="validate-results" class="card">
+			<form method="POST" enctype="multipart/form-data">
+
+				<!-- Top row -->
+				<section class="container">
+					<section class="category">
+						<h2>All Done!</h2>
+						<p>Thanks for taking the time to participate in this study! Your contribution is greatly appreciated.</p>
+						<p>You can close this tab/window now.</p>
+					</section>
+				</section>
+
 			</form>
 		</article>
 
