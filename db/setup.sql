@@ -12,19 +12,21 @@ create table fields(
 /* Populate fields for Test 1 */
 insert into fields (id, name, actual_value)
 values
-	(0, "Current assets", 590.3),
-	(1, "Cash and cash equivalents", 226.2),
-	(2, "Trade receivables and other", 143.0),
-	(3, "Income tax receivable", 109.3),
-	(4, "Total current assets", 1068.8),
-	(5, "Deferred tax assets", 58.3),
-	(6, "Intangible assets", 1488.1),
-	(7, "Property, plant and equipment", 2514.2),
-	(8, "Deferred tax liabilities", 552.4),
-	(9, "Long-term debt", 9602.9),
-	(10, "Total non-current liabilities", 10157.9),
-	(11, "Issued capital", 804.6),
-	(12, "Total liabilities and equity", 5655.4);
+	(0, "Accounts receivable", 1984),
+	(1, "Inventories", 423),
+	(2, "Current portion of contract assets", 1094),
+	(3, "Other current assets", 714),
+	(4, "Total current assets", 6343),
+	(5, "Property, plant and equipment", 14049),
+	(6, "Investments", 2554),
+	(7, "Goodwill", 3923),
+	(8, "Total assets", 40076),
+	(9, "Short-term borrowings", 966),
+	(10, "Income tax payable", 232),
+	(11, "Other current liabilities", 126),
+	(12, "Total current liabilities", 5748),
+	(13, "Long-term-debt", 18375),
+	(14, "Total liabilities", 29877);
 
 /* Populate fields for Test 2 */
 insert into fields (id, name, actual_value, extracted_value)
@@ -36,9 +38,9 @@ values
 	(24, "Interest expense", 1146, 1146),
 	(25, "Impairment of assets", 279, 279),
 	(26, "Income taxes", 967, 967),
-	(27, "Net earnings", 2926, 2926),
+	(27, "Net earnings", 2926, 2920),
 	(28, "Common shareholders", 2716, 2716),
-	(29, "Preferred shareholders", 152, 152),
+	(29, "Preferred shareholders", 152, 157),
 	(30, "Non-controlling interest", 58, 58),
 	(31, "Common shareholders", 2716, 2716),
 	(32, "Preferred shareholders", 152, 152),
