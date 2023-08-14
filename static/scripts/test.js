@@ -54,6 +54,7 @@ function onAudioFinished(rowIndex) {
 
 			// Shade field background
 			interruptedField.style.background = "#ffe0e0";
+			window.setTimeout(() => interruptedField.style.background = "#ffffff", 1000);
 
 			// Put cursor in field
 			interruptedField.select();

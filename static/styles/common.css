@@ -231,6 +231,7 @@ row {
 .validation-row input[type="text"].test {
 	height: 2.3em;
 	text-align: right;
+	transition: background-color 1s;
 	width: 7rem;
 }
 .validation-row label {
