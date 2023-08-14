@@ -46,7 +46,7 @@ function onAudioFinished(rowIndex) {
 		interruptClicked = false;
 
 		// Remove interrupt listener
-		removeEventListener("mousedown", interruptAudio);
+		removeEventListener("mousedown", interruptAudio, true);
 
 		// Focus interrupted field
 		let interruptedField = document.querySelector("#audio-" + rowIndex + " ~ input");
@@ -79,11 +79,7 @@ function playAudio(rowIndex) {
 	currentRowIndex = rowIndex;
 
 	// Clear highlighting and selection from all input fields
-	inputFields = document.querySelectorAll("#validation-content input");
-	for (inputField of inputFields) {
-		inputField.style = "";
-		inputField.blur();
-	}
+	resetTranscribedFields();
 
 	// Get control references
 	let audioSample = document.getElementById("audio-" + rowIndex)
@@ -103,6 +99,11 @@ function playAudio(rowIndex) {
 
 	// Play the audio
 	audioSample.play();
+
+	// Don't execute default action if invoked directly
+	return false;
+}
+
 //
 // Record test results
 //
@@ -126,6 +127,20 @@ function recordTestResults(elapsedSeconds, numValues, numErrors, nextPageState) 
 	});
 
 }
+
+//
+// Reset formatting on transcribed fields
+//
+function resetTranscribedFields() {
+
+	// Get field container
+	inputFields = document.querySelectorAll("#validation-content input");
+
+	// Reset input fields
+	for (inputField of inputFields) {
+		inputField.style = "";
+		inputField.blur();
+	}
 }
 
 //
