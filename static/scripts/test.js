@@ -103,6 +103,29 @@ function playAudio(rowIndex) {
 
 	// Play the audio
 	audioSample.play();
+//
+// Record test results
+//
+function recordTestResults(elapsedSeconds, numValues, numErrors, nextPageState) {
+
+	fetch("/record-test-results", { method: "POST", body: formData }).then(response => {
+		if (response.ok) {
+			// Success
+			// Display validation page
+			updatePageState(nextPageState);
+		}
+		else {
+			// Error
+			console.log(response);
+			window.location.href = "/error.html";
+		}
+	}).catch(error => {
+		// Error
+		console.log(response);
+		window.location.href = "/error.html";
+	});
+
+}
 }
 
 //
@@ -110,19 +133,19 @@ function playAudio(rowIndex) {
 //
 function updatePageState(visibleSectionIndex) {
 
-	// Get section references
-	let sections = [
-		document.getElementById("choose-page"),
-		document.getElementById("working-page"),
-		document.getElementById("validate-results"),
-		document.getElementById("download-data"),
-	];
+	// Set all section visibilities
+	for (let i = 1; i <= 6; i++) {
 
-	// Hide all sections
-	for (section of sections) {
-		section.style.display = "none";
+		// Get section reference
+		let section = document.getElementById("validation-test-" + i);
+
+		// Hide section if not indicated
+		if (i != visibleSectionIndex) {
+			section.style.display = "none";
+		}
+		else {
+			// Show indicated section
+			section.style.display = "block";
+		}
 	}
-
-	// Show the target section
-	sections[visibleSectionIndex].style.display = "block";
 }

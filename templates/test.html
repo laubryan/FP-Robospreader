@@ -10,7 +10,7 @@
 		<h1><img src="{{ url_for('static', filename='images/robospreader.png') }}">Document Extraction Validation Test</h1>
 
 		<!-------------------------------- Intro -------------------------------->
-		<article id="choose-page" class="card">
+		<article id="validation-test-1" class="card">
 			<section class="container">
 				<section class="category">
 					<h2>{% block title %}Welcome{% endblock %}</h2>
@@ -29,38 +29,37 @@
 
 			<!-- Bottom row -->
 			<footer class="solo">
-				<button id="button-next" type="button" onclick="">Next</button>
+				<button id="button-next" type="button" onclick="updatePageState(2)">Next</button>
 			</footer>
 		</article>
 
 		<!-------------------------------- Manual Intro -------------------------------->
-		<article id="validate-results" class="card">
+		<article id="validation-test-2" class="card" hidden="true">
 			<form method="POST" enctype="multipart/form-data">
 
 				<!-- Top row -->
 				<section class="container">
 					<section class="category">
 						<h2>1. Manual Transcription Test</h2>
-						<p>In this test you will be presented with a financial statement.</p>
+						<p>In this timed test you will be presented with a financial statement.</p>
 						<p>Your task is to:</p>
 						<ol>
 							<li>Copy the values from all matching line items to their appropriate fields.</li>
 							<li>Click Done when all the fields have been filled in.</li>
 						</ol>
-						<p>This test will be timed.</p>
 						<p>Click <strong>Start the Test</strong> when ready.</p>
 					</section>
 				</section>
 
 			<!-- Bottom row -->
 			<footer class="solo">
-				<button id="button-next" type="button" onclick="">Start the Test</button>
+				<button id="button-next" type="button" onclick="updatePageState(3)">Start the Test</button>
 			</footer>
 			</form>
 		</article>
 
 		<!-------------------------------- Manual Test -------------------------------->
-		<article id="validate-results" class="card">
+		<article id="validation-test-3" class="card" hidden="true">
 			<form method="POST" enctype="multipart/form-data">
 
 				<!-- Top row -->
@@ -102,13 +101,13 @@
 
 				<!-- Bottom row -->
 				<footer class="solo">
-					<button id="button-next" type="button" onclick="">Done</button>
+					<button id="button-next" type="button" onclick="updatePageState(4)">Done</button>
 				</footer>
 			</form>
 		</article>
 
 		<!-------------------------------- Automatic Intro -------------------------------->
-		<article id="validate-results" class="card">
+		<article id="validation-test-4" class="card" hidden="true">
 			<form method="POST" enctype="multipart/form-data">
 
 				<!-- Top row -->
@@ -116,7 +115,7 @@
 					<section class="category">
 						<h2>2. Automatic Transcription Test</h2>
 						<p>
-							In this test you will be presented with a set of images cropped from a financial statement, 
+							In this timed test you will be presented with a set of images cropped from a financial statement, 
 							and their automatically transcribed values.
 						</p>
 						<p>Your task is to:</p>
@@ -125,7 +124,6 @@
 							<li>If the values don't match, make corrections to the value in the text field.</li>
 							<li>Click Done when all the fields have been validated.</li>
 						</ol>
-						<p>This test will be timed.</p>
 						<p>
 							To help with validation, you can click any Play button to have the system read the values to you.
 							<ol>
@@ -141,14 +139,13 @@
 
 			<!-- Bottom row -->
 			<footer class="solo">
-				<button id="button-next" type="button" onclick="">Start the Test</button>
+				<button id="button-next" type="button" onclick="updatePageState(5)">Start the Test</button>
 			</footer>
 			</form>
 		</article>
 		
 		<!-------------------------------- Automatic Test -------------------------------->
-		<article id="validate-results" class="card">
-			<form method="POST" enctype="multipart/form-data">
+		<article id="validation-test-5" class="card" hidden="true">
 
 				<!-- Top row -->
 				<section class="container">
@@ -190,13 +187,12 @@
 
 				<!-- Bottom row -->
 				<footer class="solo">
-					<button id="button-next" type="button" onclick="">Done</button>
+					<button id="button-next" type="button" onclick="updatePageState(6)">Done</button>
 				</footer>
-			</form>
 		</article>
 
 		<!-------------------------------- End -------------------------------->
-		<article id="validate-results" class="card">
+		<article id="validation-test-6" class="card" hidden="true">
 			<form method="POST" enctype="multipart/form-data">
 
 				<!-- Top row -->
