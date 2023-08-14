@@ -35,6 +35,19 @@ button:disabled {
 	border: 1px solid #bbb;
 }
 
+/* Image button class */
+.image-button {
+	height: 2.3em;
+	margin: 0;
+	padding: 0;
+	vertical-align: bottom;
+	width: 4em;
+}
+.image-button img {
+	height: 1.5rem;
+	width: 1.5rem;
+}
+
 /* Category sections */
 .category {
 	border: 1px solid #a0a0a0;

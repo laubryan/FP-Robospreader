@@ -126,6 +126,15 @@
 							<li>Click Done when all the fields have been validated.</li>
 						</ol>
 						<p>This test will be timed.</p>
+						<p>
+							To help with validation, you can click any Play button to have the system read the values to you.
+							<ol>
+								<li>Click any Play button. The system will read the extracted values for each row out loud.</li>
+								<li>Compare the spoken value with the cell image.</li>
+								<li>To make corrections, click anywhere on the page. The system will stop reading at the current row.</li>
+								<li>You can resume the reading comparison by clicking the Play button at any desired row.</li>
+							</ol>
+						</p>
 						<p>Click <strong>Start the Test</strong> when ready.</p>
 					</section>
 				</section>
@@ -151,6 +160,10 @@
 							<li>Fix any values that don't match.</li>
 							<li>Click Done when all the fields have been validated.</li>
 						</ol>
+						<p>
+							If you would like the system to read the values to you, then click here: 
+							<button class="image-button" onclick="playAudio({{test2_data[0]['id']}})"><img src="/static/images/speaker.png"></button>
+						</p>
 					</section>
 				</section>
 
@@ -165,7 +178,7 @@
 								<row id="row-{{row['id']}}" class="validation-row" data-label="Current assets">
 									<span class='line-item-label test'>{{row["name"]}}</span>
 									<img id="cell-image-{{row['id']}}" src="/static/images/test/cell-image-{{row['id']}}.png" class="cell-image">
-									<button id="btn-play" type="button" title="Play" onclick="playAudio({{row['id']}})" {{ "" if row["audio"] else "disabled" }}><img src="/static/images/play.png"></button>
+									<button id="btn-play" type="button" title="Play" onclick="playAudio({{row['id']}})" {{ "" if row["audio"] else "disabled" }}><img src="/static/images/speaker.png"></button>
 									<audio id="audio-{{row['id']}}" autobuffer="autobuffer"><source src="{{row['audio']}}"/></audio>
 									<input class="test" type="text" value="{{row['extracted_value']}}">
 								</row>
