@@ -148,7 +148,7 @@
 		</article>
 		
 		<!-------------------------------- Automatic Test -------------------------------->
-		<article id="validation-test-5" class="card" hidden="true">
+		<article id="validation-test-5" class="card">
 
 				<!-- Top row -->
 				<section class="container">
@@ -177,16 +177,18 @@
 								<table>
 									{% for row in test2_data %}
 									{% if loop.index0 == 0 %}
-									<tr>
-										<th>Line Item</th>
-										<th>Actual Value</th>
-										<th>&nbsp;</th>
-										<th>Transcribed Value</th>
-									</tr>
+									<thead>
+										<tr>
+											<th>Line Item</th>
+											<th>Actual Value</th>
+											<th>&nbsp;</th>
+											<th>Transcribed Value</th>
+										</tr>
+									</thead>
 									{% endif %}
 									<tr id="row-{{row['id']}}" class="validation-row">
 										<td>
-											<span class='line-item-label test'>{{row["name"]}}</span>
+											<span class="line-item-label test">{{row["name"]}}</span>
 										</td>
 										<td>
 											<img id="cell-image-{{row['id']}}" src="/static/images/test/cell-image-{{row['id']}}.png" class="cell-image">

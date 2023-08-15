@@ -13,15 +13,17 @@
 					<h1>Tables</h1>
 					{% for table in tables %}
 						<table>
-							<tr><th colspan="100%" style="text-align: left;">{{table["name"]}}</th></tr>
-							{% for row in table["rows"] %}
-							{% if loop.index0 == 0 %}
-							<tr>
-								{% for field in row %}
-								<th>{{field}}</th>
-								{% endfor %}
-							</tr>
-							{% endif %}
+							<thead>
+								<tr><th colspan="100%" style="text-align: left;">{{table["name"]}}</th></tr>
+								{% for row in table["rows"] %}
+								{% if loop.index0 == 0 %}
+								<tr>
+									{% for field in row %}
+									<th>{{field}}</th>
+									{% endfor %}
+								</tr>
+								{% endif %}
+							</thead>
 							<tr>
 								{% for field, value in row.items() %}
 								<td>{{value}}</td>&nbsp;

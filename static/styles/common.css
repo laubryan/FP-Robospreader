@@ -177,7 +177,7 @@ li {
 	width: 24rem;
 }
 .line-item-label.test {
-	padding-right: 1rem;
+	padding-left: 2rem;
 	width: 100%;
 }
 
@@ -231,6 +231,22 @@ td {
 th {
 	font-size: 1.1em;
 	padding: 0.5rem 1.4rem 0.3rem 1rem;
+}
+
+/* Table headings background shading */
+thead {
+	background-color: #ccc;
+}
+
+/* Alternating table row colors */
+tr:nth-child(odd) {
+	background-color: white;
+}
+tr:nth-child(even) {
+	background-color: #e8f0ff;
+}
+tr:nth-child(1) {
+	background: none;
 }
 
 /* Validation row controls */
