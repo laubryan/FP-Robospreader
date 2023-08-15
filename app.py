@@ -79,6 +79,22 @@ def processPageImage():
 
     return { "validation_data": validation_data }
 
+# Create audio string
+@app.route("/create-audio-string", methods=["POST"])
+def createAudioString():
+
+    # Get value string
+    value_string = request.form.get("value-string", "")
+
+    # Create audio string
+    audio_string = processor.create_audio_string(value_string)
+
+    return audio_string
+
+#
+# API Methods for Test
+#
+
 # Record test results
 @app.route("/record-test-results", methods=["POST"])
 def recordTestResults():
