@@ -207,6 +207,23 @@ row {
 	margin: 1rem 0 1rem 0;
 }
 
+/* Table styling */
+table, td, th {
+	border: 1px solid gray;
+	border-collapse: collapse;
+	padding: 0.2rem;
+	text-align: right;
+}
+
+td {
+	padding: 0.2rem 1rem 0.2rem 1rem;
+}
+
+th {
+	font-size: 1.1em;
+	padding: 0.5rem 1.4rem 0.3rem 1rem;
+}
+
 /* Validation row controls */
 .validation-row {
 	background-color: #d8d8d8;

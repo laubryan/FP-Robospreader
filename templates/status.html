@@ -1,9 +1,10 @@
-<html>
+<html lang="en">
 	<head>
 		<title>Status</title>
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/common.css') }}">
 	</head>
 	<body>
+		<h1>Database Status</h1>
 
 		<!-------------------------------- Status -------------------------------->
 		<article id="choose-page" class="card">
@@ -11,14 +12,23 @@
 				<section class="category">
 					<h1>Tables</h1>
 					{% for table in tables %}
-						<h2>{{table["name"]}}</h2>
-						{% for row in table["rows"] %}
-							<row>
-								{% for field, value in row.items() %}
-								<span>{{value}}</span>&nbsp;
+						<table>
+							<tr><th colspan="100%" style="text-align: left;">{{table["name"]}}</th></tr>
+							{% for row in table["rows"] %}
+							{% if loop.index0 == 0 %}
+							<tr>
+								{% for field in row %}
+								<th>{{field}}</th>
 								{% endfor %}
-							</row>
+							</tr>
+							{% endif %}
+							<tr>
+								{% for field, value in row.items() %}
+								<td>{{value}}</td>&nbsp;
+								{% endfor %}
+							</tr>
 						{% endfor %}
+						</table>
 					{% endfor %}
 				</section>
 			</section>

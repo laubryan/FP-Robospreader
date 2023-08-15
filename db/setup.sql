@@ -5,7 +5,7 @@ drop table if exists fields;
 create table fields(
 	id integer primary key,
 	name text not null,
-	actual_value real,
+	actual_value text,
 	extracted_value text
 	);
 
@@ -68,5 +68,15 @@ insert into tests (test_id, field_id)
 select 2, id
 from fields
 where id >=20;
+
+/* Create results table */
+drop table if exists results;
+create table results(
+	id integer primary key,
+	test1_time integer,
+	test1_errors integer,
+	test2_time integer,
+	test2_errors integer
+	);
 
 commit;

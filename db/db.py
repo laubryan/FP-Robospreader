@@ -51,6 +51,21 @@ def initialize():
 		db_conn.close()
 
 #
+# Get list of actual test values
+#
+def get_actual_values(test_number):
+
+	# Get value rows
+	value_rows = get_test_data(test_number)
+
+	# Extract values
+	actual_values = []
+	for row in value_rows:
+		actual_values.append(row["actual_value"])
+
+	return actual_values
+
+#
 # Get fields
 #
 def get_table(table_name, cur=None):
@@ -98,3 +113,43 @@ def get_test2():
 	table_rows = db_cur.fetchall()
 
 	return table_rows
+
+#
+# Get test data
+#
+def get_test_data(test_number):
+
+	# Get test data
+	if test_number == 1:
+		return get_test1()
+	else:
+		return get_test2()
+	
+#
+# Save test results
+#
+def save_test_results(test_id, test_number, elapsed_time_ms, num_errors):
+
+	# Connect to db if required
+	db_conn, db_cur = open_db()
+
+	# Insert Test 1 data
+	if test_number == 1:
+
+		# Insert data
+		queryParams = [elapsed_time_ms, num_errors]
+		db_cur.execute("insert into results (test1_time, test1_errors) values (?, ?)", queryParams)
+
+	else:
+
+		# Update Test 2 data
+		queryParams = [elapsed_time_ms, num_errors, test_id]
+		db_cur.execute("update results set test2_time = ?, test2_errors = ? where id = ?", queryParams)
+
+	# Get affected row ID
+	row_id = db_cur.lastrowid
+
+	# Commit
+	db_conn.commit()
+
+	return row_id

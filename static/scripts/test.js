@@ -6,6 +6,29 @@
 var interruptClicked = false;
 var currentRowIndex = -1;
 
+
+//
+// End test
+//
+function endTest(testNumber, nextPageState) {
+
+	// Record end time
+	endTime = Date.now();
+
+	// Get entered values
+	let inputFields = document.querySelectorAll("#validation-content-" + testNumber + " input");
+	let inputValues = [];
+	for (let field of inputFields) {
+		inputValues.push(field.value);
+	}
+
+	// Record test results
+	recordTestResults(testNumber, endTime, inputValues, nextPageState);
+
+	// Update page state
+	updatePageState(nextPageState);
+}
+
 //
 // User interrupted audio playback
 //
@@ -107,25 +130,36 @@ function playAudio(rowIndex) {
 //
 // Record test results
 //
-function recordTestResults(elapsedSeconds, numValues, numErrors, nextPageState) {
+function recordTestResults(testNumber, endTime, inputValues, nextPageState) {
 
-	fetch("/record-test-results", { method: "POST", body: formData }).then(response => {
-		if (response.ok) {
-			// Success
+	// Get form object for submission
+	let pageForm = document.getElementById("test-form-" + testNumber);
+	let formData = new FormData(pageForm);
+
+	// Store end time
+	formData.append("test-end-time", endTime);
+
+	// Store test values
+	formData.append("test-values", inputValues);
+
+	// Send results to backend
+	fetch("/record-test-results", { method: "POST", body: formData })
+		.then(response => response.json())
+		.then(responseData => {
+
+			// Save test ID in Test 2 form
+			testId = responseData["test_id"];
+			fieldTestId = document.querySelector("#test-form-2 #test-id");
+			fieldTestId.value = testId;
+
 			// Display validation page
 			updatePageState(nextPageState);
-		}
-		else {
+		})
+		.catch(error => {
 			// Error
 			console.log(response);
 			window.location.href = "/error.html";
-		}
-	}).catch(error => {
-		// Error
-		console.log(response);
-		window.location.href = "/error.html";
-	});
-
+		});
 }
 
 //
@@ -134,13 +168,26 @@ function recordTestResults(elapsedSeconds, numValues, numErrors, nextPageState) 
 function resetTranscribedFields() {
 
 	// Get field container
-	inputFields = document.querySelectorAll("#validation-content input");
+	inputFields = document.querySelectorAll("#validation-content-2 input");
 
 	// Reset input fields
 	for (inputField of inputFields) {
 		inputField.style = "";
 		inputField.blur();
 	}
+}
+
+//
+// Start test
+//
+function startTest(testNumber, nextState) {
+
+	// Record start time
+	startTimeField = document.querySelector("#test-form-" + testNumber + " #test-start-time");
+	startTimeField.value = Date.now();
+
+	// Update page state
+	updatePageState(nextState);
 }
 
 //
