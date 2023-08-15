@@ -139,6 +139,15 @@ h2 {
 	width: 100%;
 }
 
+/* Icons inline with text */
+.inline-icon {
+	background-color: #eee;
+	border: 1px solid gray;
+	border-radius: 0.2rem;
+	width: 1.5rem;
+	vertical-align: bottom;
+}
+
 /* Labels */
 label {
 	font-weight: bold;

@@ -20,10 +20,11 @@
 						<li>Manual Transcription</li>
 						<li>Automatic Transcription</li>
 					</ol>
-					<p>In the Manual Transcription Test you will be required to copy numbers into the fields provided.</p>
-					<p>In the Automatic Transcription Test you will validate that the fields contain correct numbers.</p>
+					<p>In the <strong>Manual Transcription Test</strong> you will be required to copy numbers into the fields provided.</p>
+					<p>In the <strong>Automatic Transcription Test</strong> you will validate that the fields contain correct numbers.</p>
+					<p>Try to complete each test as quickly as you can.</p>
 					<br>
-					<p>Click <strong>Next</strong> to continue.</p>
+					<p>Click <strong>Next</strong> for additional instructions.</p>
 				</section>
 			</section>
 
@@ -53,57 +54,59 @@
 
 			<!-- Bottom row -->
 			<footer class="solo">
-				<button id="button-next" type="button" onclick="updatePageState(3)">Start the Test</button>
+				<button id="button-next" type="button" onclick="startTest(1, 3)">Start the Test</button>
 			</footer>
 			</form>
 		</article>
 
 		<!-------------------------------- Manual Test -------------------------------->
 		<article id="validation-test-3" class="card" hidden="true">
-			<form method="POST" enctype="multipart/form-data">
 
-				<!-- Top row -->
-				<section class="container">
-					<section class="category">
-						<h2>1. Manual Transcription Test</h2>
-						<p>Your task is to:</p>
-						<ol>
-							<li>Copy the values from all matching line items to their appropriate fields.</li>
-							<li>Click Done when all the fields have been filled in.</li>
-						</ol>
-					</section>
+			<!-- Top row -->
+			<section class="container">
+				<section class="category">
+					<h2>1. Manual Transcription Test</h2>
+					<p>Your task is to:</p>
+					<ol>
+						<li>Copy the values from all matching line items to their appropriate fields.</li>
+						<li>Click Done when all the fields have been filled in.</li>
+					</ol>
+				</section>
+			</section>
+
+			<!-- Content Row -->
+			<section class="container">
+
+				<!-- Financial Statement -->
+				<section class="category threequarter">
+					<row class="centered">
+						<image src="{{ url_for('static', filename='images/test/financial-statement.png') }}" class="image-fit">
+					</row>
 				</section>
 
-				<!-- Content Row -->
-				<section class="container">
-
-					<!-- Financial Statement -->
-					<section class="category threequarter">
-						<row class="centered">
-							<image src="{{ url_for('static', filename='images/test/financial-statement.png') }}" class="image-fit">
-						</row>
-					</section>
-
-					<!-- Validation Fields -->
-					<section class="category onequarter">
-						<row class="centered">
-							<section id="validation-content">
-								{% for row in test1_data %}
-								<row id="row-0" class="validation-row" data-index="row-0" data-label="Current assets">
-									<span class='line-item-label test'>{{row["name"]}}</span>
-									<input class="test" type="text" value="">
-								</row>
-								{% endfor %}
-							</section>
-						</row>
-					</section>
+				<!-- Validation Fields -->
+				<section class="category onequarter">
+					<row class="centered">
+						<section id="validation-content-1">
+							{% for row in test1_data %}
+							<row id="row-{{row['id']}}" class="validation-row">
+								<span class='line-item-label test'>{{row["name"]}}</span>
+								<input class="test" type="text" value="">
+							</row>
+							{% endfor %}
+						</section>
+					</row>
 				</section>
+			</section>
 
-				<!-- Bottom row -->
-				<footer class="solo">
-					<button id="button-next" type="button" onclick="updatePageState(4)">Done</button>
-				</footer>
-			</form>
+			<!-- Bottom row -->
+			<footer class="solo">
+				<button id="button-next" type="button" onclick="endTest(1, 4)">Done</button>
+				<form id="test-form-1" method="POST">
+					<input id="test-number" name="test-number" type="hidden" value="1">
+					<input id="test-start-time" name="test-start-time" type="hidden" value="">
+				</form>
+			</footer>
 		</article>
 
 		<!-------------------------------- Automatic Intro -------------------------------->
@@ -120,17 +123,17 @@
 						</p>
 						<p>Your task is to:</p>
 						<ol>
-							<li>Compare the cell image to the transcribed value.</li>
-							<li>If the values don't match, make corrections to the value in the text field.</li>
+							<li>Compare the <strong>Actual Values</strong> to the <strong>Transcribed Values</strong>.</li>
+							<li>Fix any <strong>Transcribed Values</strong> that don't match.</li>
 							<li>Click Done when all the fields have been validated.</li>
 						</ol>
 						<p>
 							To help with validation, you can click any Play button to have the system read the values to you.
 							<ol>
-								<li>Click any Play button. The system will read the extracted values for each row out loud.</li>
-								<li>Compare the spoken value with the cell image.</li>
+								<li>Click any Play <img src="/static/images/speaker.png" class="inline-icon"> button. The system will read the <strong>Transcribed Values</strong> for each row out loud.</li>
+								<li>Compare the spoken value with the <strong>Actual Value</strong>.</li>
 								<li>To make corrections, click anywhere on the page. The system will stop reading at the current row.</li>
-								<li>You can resume the reading comparison by clicking the Play button at any desired row.</li>
+								<li>You can resume the reading comparison by clicking the Play <img src="/static/images/speaker.png" class="inline-icon"> button at any desired row.</li>
 							</ol>
 						</p>
 						<p>Click <strong>Start the Test</strong> when ready.</p>
@@ -139,7 +142,7 @@
 
 			<!-- Bottom row -->
 			<footer class="solo">
-				<button id="button-next" type="button" onclick="updatePageState(5)">Start the Test</button>
+				<button id="button-next" type="button" onclick="startTest(2, 5)">Start the Test</button>
 			</footer>
 			</form>
 		</article>
@@ -153,12 +156,12 @@
 						<h2>2. Automatic Transcription Test</h2>
 						<p>Your task is to:</p>
 						<ol>
-							<li>Compare the cell image to the transcribed value.</li>
-							<li>Fix any values that don't match.</li>
+							<li>Compare the <strong>Actual Values</strong> to the <strong>Transcribed Values</strong>.</li>
+							<li>Fix any <strong>Transcribed Values</strong> that don't match.</li>
 							<li>Click Done when all the fields have been validated.</li>
 						</ol>
 						<p>
-							If you would like the system to read the values to you, then click here: 
+							If you would like the system to read the Transcribed Values to you, then click this button: 
 							<button class="image-button" onclick="playAudio({{test2_data[0]['id']}})"><img src="/static/images/speaker.png"></button>
 						</p>
 					</section>
@@ -170,16 +173,34 @@
 					<!-- Validation Fields -->
 					<section class="category">
 						<row class="centered">
-							<section id="validation-content">
-								{% for row in test2_data %}
-								<row id="row-{{row['id']}}" class="validation-row" data-label="Current assets">
-									<span class='line-item-label test'>{{row["name"]}}</span>
-									<img id="cell-image-{{row['id']}}" src="/static/images/test/cell-image-{{row['id']}}.png" class="cell-image">
-									<button id="btn-play" type="button" title="Play" onclick="playAudio({{row['id']}})" {{ "" if row["audio"] else "disabled" }}><img src="/static/images/speaker.png"></button>
-									<audio id="audio-{{row['id']}}" autobuffer="autobuffer"><source src="{{row['audio']}}"/></audio>
-									<input class="test" type="text" value="{{row['extracted_value']}}">
-								</row>
-								{% endfor %}
+							<section id="validation-content-2">
+								<table>
+									{% for row in test2_data %}
+									{% if loop.index0 == 0 %}
+									<tr>
+										<th>Line Item</th>
+										<th>Actual Value</th>
+										<th>&nbsp;</th>
+										<th>Transcribed Value</th>
+									</tr>
+									{% endif %}
+									<tr id="row-{{row['id']}}" class="validation-row">
+										<td>
+											<span class='line-item-label test'>{{row["name"]}}</span>
+										</td>
+										<td>
+											<img id="cell-image-{{row['id']}}" src="/static/images/test/cell-image-{{row['id']}}.png" class="cell-image">
+										</td>
+										<td>
+											<button id="btn-play" type="button" title="Read from here" onclick="playAudio({{row['id']}})" {{ "" if row["audio"] else "disabled" }}><img src="/static/images/speaker.png"></button>
+											<audio id="audio-{{row['id']}}" autobuffer="autobuffer"><source src="{{row['audio']}}"/></audio>
+										</td>
+										<td>
+											<input class="test" type="text" value="{{row['extracted_value']}}">
+										</td>
+									</tr>
+									{% endfor %}
+								</table>
 							</section>
 						</row>
 					</section>
@@ -187,7 +208,12 @@
 
 				<!-- Bottom row -->
 				<footer class="solo">
-					<button id="button-next" type="button" onclick="updatePageState(6)">Done</button>
+					<button id="button-next" type="button" onclick="endTest(2, 6)">Done</button>
+					<form id="test-form-2" method="POST" enctype="multipart/form-data">
+						<input id="test-id" name="test-id" type="hidden" value="">
+						<input id="test-number" name="test-number" type="hidden" value="2">
+						<input id="test-start-time" name="test-start-time" type="hidden" value="">
+					</form>
 				</footer>
 		</article>
 
