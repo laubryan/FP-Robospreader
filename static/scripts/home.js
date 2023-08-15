@@ -523,7 +523,10 @@ async function submitPage() {
 
 	// Submit the form
 	fetch("/process-page-image", { method: "POST", body: formData }).then(response => {
+
+		// Successful
 		if (response.ok) {
+
 			// Success
 			populateValidationData(response);
 
@@ -531,11 +534,13 @@ async function submitPage() {
 			updatePageState(2);
 		}
 		else {
+
 			// Error
 			console.log(response);
 			window.location.href = "/error.html";
 		}
 	}).catch(error => {
+
 		// Error
 		console.log(response);
 		window.location.href = "/error.html";
