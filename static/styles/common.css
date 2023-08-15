@@ -286,6 +286,11 @@ tr:nth-child(1) {
 	width: 20rem;
 }
 
+/* Embedded videos */
+video {
+	margin-bottom: 2rem;
+}
+
 /* Working page card */
 .working {
 	align-items: center;
