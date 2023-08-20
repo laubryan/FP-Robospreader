@@ -333,8 +333,8 @@ async function populateValidationData(response) {
 		<row id="row-${i}" class="validation-row" data-index="row-${i}" data-label="${row.label}">
 			<span class='line-item-label'>${row.label}</span>
 			<img id="cell-image-${i}" src="${row.cell_image}" class="cell-image">
-			<button id="btn-play" type="button" title="Play" onclick="playAudio(${i})" ${row.audio ? "" : "disabled"}><img src="/static/images/play.png"></button>
-			<audio id="audio-${i}" autobuffer="autobuffer"><source src="${row.audio}"/></audio>
+			<button id="btn-play" type="button" title="Play" onclick="playAudio(${i})" ${row.audio ? "" : "disabled"}><img src="/static/images/speaker.png"></button>
+			<audio id="audio-${i}" autobuffer="autobuffer" src="${row.audio}"></audio>
 			<input type="text" value="${row.extracted_value}">
 			<button id="btn-delete" type="button" title="Delete" onclick="deleteRow(${i})"><img src="/static/images/delete.png"></button>
 		</row>
