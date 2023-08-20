@@ -1,2 +1,3 @@
-# FP-Prototype
-Final Project prototype
+# Final Project - Robospreader Application
+
+Application to automatically extract structured financial statement data from PDF file pages.
