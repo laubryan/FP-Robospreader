@@ -60,4 +60,4 @@ def createAudioString():
     # Create audio string
     audio_string = processor.create_audio_string(value_string)
 
-    return audio_string
+    return { "audio_string": audio_string }

@@ -12,6 +12,10 @@ var buttonNextSelect = null;
 var buttonNextValidate = null;
 var fieldPageNumber = null;
 
+// Capture stop audio click
+var interruptClicked = false;
+var currentRowIndex = -1;
+
 //
 // Accept validations
 //
@@ -263,6 +267,69 @@ function getValidatedData() {
 }
 
 //
+// User interrupted audio playback
+//
+function interruptAudio(event) {
+
+	// Set interrupt flag
+	interruptClicked = true;
+
+	// Stop audio
+	let currentAudio = document.querySelector("#audio-" + currentRowIndex);
+	if (currentAudio) {
+
+		// Stop audio
+		currentAudio.pause();
+		currentAudio.currentTime = 0;
+
+		// Reset cell image transforms
+		let imageField = document.getElementById("cell-image-" + currentRowIndex);
+		imageField.style = "";
+	}
+
+	// Call finished handler explicitly
+	// (for situations where the audio was interrupted)
+	onAudioFinished(currentRowIndex);
+
+	return false;
+}
+
+//
+// Audio finished playing
+//
+function onAudioFinished(rowIndex) {
+	
+	// Check if interrupt was clicked
+	if (interruptClicked) {
+
+		// Reset interrupt flag
+		interruptClicked = false;
+
+		// Remove interrupt listener
+		removeEventListener("mousedown", interruptAudio, true);
+
+		// Focus interrupted field
+		let interruptedField = document.querySelector("#audio-" + rowIndex + " ~ input");
+		if (interruptedField) {
+
+			// Shade field background
+			interruptedField.style.background = "#ffe0e0";
+			window.setTimeout(() => interruptedField.style.background = "#ffffff", 1000);
+
+			// Put cursor in field
+			interruptedField.select();
+			window.setTimeout(() => interruptedField.focus(), 0);
+		}
+	}
+	else {
+
+		// No interrupt, so play next audio
+		nextRowId = rowIndex + 1;
+		playAudio(nextRowId);
+	}
+}
+
+//
 // Key pressed in page number field
 //
 function onPageNumberKeyPressed(e) {
@@ -283,24 +350,86 @@ function onPageNumberKeyPressed(e) {
 }
 
 //
+// User changed field value
+//
+function onValueChanged(field) {
+
+	// Get the new value
+	newValue = field.value;
+
+	// Get row element and row ID
+	rowElement = field.parentElement;
+	rowId = rowElement.dataset.id;
+
+	// Clear the row's audio
+	audioElement = document.getElementById("audio-" + rowId);
+	audioElement.dataset.status = "updating";
+
+	// Create temporary form
+	let audioChangeForm = document.createElement("form");
+	audioChangeForm.method = "POST";
+	let formData = new FormData(audioChangeForm);
+	formData.append("value-string", newValue);
+
+	// Update audio string
+	fetch("/create-audio-string", { method: "POST", body: formData })
+		.then(response => response.json())
+		.then(responseData => {
+
+			// Update the audio string
+			newAudioString = responseData["audio_string"];
+			audioElement.src = newAudioString;
+
+			// Clear updating flag
+			audioElement.dataset.status = "";
+		})
+		.catch(error => {
+			// Error
+			console.log(error);
+			window.location.href = "/error.html";
+		});
+}
+
+//
 // Play audio sample
 //
 function playAudio(rowIndex) {
 
+	// Set interrupt handler
+	addEventListener("mousedown", interruptAudio, true);
+	currentRowIndex = rowIndex;
+
+	// Clear highlighting and selection from all input fields
+	resetTranscribedFields();
+	
 	// Get control references
 	let audioSample = document.getElementById("audio-" + rowIndex)
 	let imageField = document.getElementById("cell-image-" + rowIndex);
+	if (!audioSample) return;
 
 	// Highlight image field
 	imageField.style = "border: 2px solid red; transform: scale(1.4);";
 
+	// Check for updating audio
+	if (audioSample.dataset.status == "updating") {
+
+		// Wait for update to finish
+		window.setTimeout(() => playAudio(rowIndex), 500);
+	}
+	
 	// Unhighlight field on audio end
 	audioSample.onended = () => {
 		imageField.style = "";
 	}
 
+	// Set finished event handler
+	audioSample.addEventListener("ended", () => onAudioFinished(rowIndex), false);
+
 	// Play the audio
 	audioSample.play();
+
+	// Don't execute default action if invoked directly
+	return false;
 }
 
 //
@@ -330,12 +459,12 @@ async function populateValidationData(response) {
 
 		// Define row HTML
 		let rowHtml = `
-		<row id="row-${i}" class="validation-row" data-index="row-${i}" data-label="${row.label}">
+		<row id="row-${i}" class="validation-row" data-id=${i} data-label="${row.label}">
 			<span class='line-item-label'>${row.label}</span>
 			<img id="cell-image-${i}" src="${row.cell_image}" class="cell-image">
 			<button id="btn-play" type="button" title="Play" onclick="playAudio(${i})" ${row.audio ? "" : "disabled"}><img src="/static/images/speaker.png"></button>
 			<audio id="audio-${i}" autobuffer="autobuffer" src="${row.audio}"></audio>
-			<input type="text" value="${row.extracted_value}">
+			<input type="text" value="${row.extracted_value}" onchange="onValueChanged(this)">
 			<button id="btn-delete" type="button" title="Delete" onclick="deleteRow(${i})"><img src="/static/images/delete.png"></button>
 		</row>
 		`;
@@ -449,6 +578,21 @@ function resetSelectPage() {
 
 	// Reset page controls
 	enablePageControls(false);
+}
+
+//
+// Reset formatting on transcribed fields
+//
+function resetTranscribedFields() {
+
+	// Get field container
+	inputFields = document.querySelectorAll("#validation-content-2 input");
+
+	// Reset input fields
+	for (inputField of inputFields) {
+		inputField.style = "";
+		inputField.blur();
+	}
 }
 
 //
