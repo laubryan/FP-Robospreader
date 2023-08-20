@@ -212,16 +212,28 @@ function downloadData(format) {
 	// Get raw data
 	let dataElements = getValidatedData();
 	format = format.toLowerCase();
-	
+
 	// Download data format
 	if (format == "json") {
 		dataObject = JSON.stringify(dataElements);
+
+		// Download file
+		saveObjectAsFile("financial-data." + format, dataObject, format);
 	}
 	if (format == "csv") {
+
+		// Quote all labels
+		dataElements.forEach(row => row["label"] = "\"" + row["label"] + "\"");
+
+		// Join header and data rows
 		const array = [Object.keys(dataElements[0])].concat(dataElements);
+
+		// Convert rows to strings
 		dataObject = array.map(it => Object.values(it).toString()).join('\n');
+
+		// Download file
+		saveObjectAsFile("financial-data." + format, dataObject, format);
 	}
-	saveObjectAsFile("financial-data." + format, dataObject);
 }
 
 //
@@ -241,8 +253,8 @@ function getValidatedData() {
 
 	// Assemble validated data
 	let dataElements = [];
-	let container = document.getElementById("validation-content");
-	for (rowElement of container.children) {
+	let container = document.querySelectorAll("#validation-content row");
+	for (rowElement of container) {
 
 		// Skip header row
 		if (rowElement.id != "header-row") {
@@ -262,6 +274,9 @@ function getValidatedData() {
 			dataElements.push(dataElement);
 		}
 	}
+
+	// DEBUG
+	console.log(dataElements);
 
 	return dataElements;
 }
@@ -657,9 +672,11 @@ function restart(resetSelect, resetValidation) {
 //
 // Save object as file
 //
-function saveObjectAsFile(filename, dataObject) {
+function saveObjectAsFile(filename, dataObject, format) {
 	
-	const blob = new Blob([dataObject], { type: "text/json" });
+	dataObject = "\uFEFF" + dataObject;
+
+	const blob = new Blob([dataObject], { type: "text/" + format, encoding: "UTF-8" });
 	const link = document.createElement("a");
 
 	link.download = filename;
