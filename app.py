@@ -46,7 +46,10 @@ def processPageImage():
     page_image = processor.convert_image_string(page_image_string)
 
     # Convert image to data
-    validation_data = processor.process_image(page_image)
+    try:
+        validation_data = processor.process_image(page_image)
+    except:
+        validation_data = []
 
     return { "validation_data": validation_data }
 

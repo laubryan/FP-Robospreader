@@ -158,6 +158,10 @@ def group_text_into_rows(page_text_pd, table_box):
 	# Assemble row boxes
 	row_boxes = [row for _, row in rows_dict.items()]
 
+	# Page does not contain a table
+	if not row_boxes:
+		return row_boxes, None, None
+
 	# Compute row height frequencies
 	row_heights = {}
 	for row_box in row_boxes:
@@ -284,6 +288,11 @@ def identify_table_columns(binarized_image, table_location, page_text_df, num_ro
 			if not column_was_merged:
 				output_columns.append(column_box)
 	column_boxes = output_columns
+
+	# Page does not contain a column, 
+	# therefore most likely not a table
+	if not column_boxes:
+		return []
 
 	# Discard rightmost columns that don't contain enough numbers
 	column_digits_threshold = 0.8 # The ratio of cells that must contain numbers
@@ -454,12 +463,16 @@ def process_image(page_image):
 	table_location = segment_table(binarized_image)
 	if table_location == None:
 		return None
-
+	
 	# Identify entire page text
 	page_text_df = identify_page_text(page_image)
 
 	# Group page text into rows
 	row_boxes, row_left, row_right = group_text_into_rows(page_text_df, table_location)
+
+	# If there are no detected rows, then likely not a table
+	if not row_boxes:
+		return []
 
 	# Adjust horizontal table boundaries based on detected row data
 	if row_left < table_location[0]:
@@ -469,6 +482,10 @@ def process_image(page_image):
 
 	# Identify table columns
 	column_boxes = identify_table_columns(binarized_image, table_location, page_text_df, len(row_boxes))
+
+	# If there are no detected columns, then likely not a table
+	if not (column_boxes and len(column_boxes) > 0):
+		return []
 
 	# Parse the rows
 	row_data = parse_rows(page_image, row_boxes, column_boxes, page_text_df)

@@ -441,8 +441,38 @@ async function populateValidationData(response) {
 	let jsonData = await response.json();
 	let validationData = jsonData["validation_data"];
 
-	// Add row headers
+	// Get control references
 	let container = document.getElementById("validation-content")
+
+	// No validation data
+	if (!validationData || validationData.length == 0) {
+
+		// Remove section content
+		let contentRows = document.querySelectorAll("#validate-results .category row");
+		if (contentRows) {
+			for (let contentRow of contentRows) {
+				contentRow.remove();
+			}
+		}
+
+		// Display informative message
+		let messageHtml = `
+		<row id="header-row" class="header-row">
+			<p>Sorry, the page did not contain any recognizable table data. Please select another page and try again.</p>
+		</row>
+		`;
+		let messageElement = document.createElement("template")
+		messageElement.innerHTML = messageHtml;
+		container.appendChild(messageElement.content);
+	
+		// Disable next button
+		let nextButton = document.getElementById("button-next-validate");
+		nextButton.disabled = true;
+
+		return;
+	}
+
+	// Add row headers
 	let headerHtml = `
 	<row id="header-row" class="header-row">
 		<span class="line-item-label">&nbsp;</span>
