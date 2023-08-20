@@ -275,9 +275,6 @@ function getValidatedData() {
 		}
 	}
 
-	// DEBUG
-	console.log(dataElements);
-
 	return dataElements;
 }
 
