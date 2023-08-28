@@ -205,8 +205,8 @@ p {
 /* Page display canvas */
 #pdf-view {
 	border: 1px solid gray;
-	height: 400px;
-	width: 300px;
+	min-height: 650px;
+	width: 500px;
 }
 
 /* Row container */

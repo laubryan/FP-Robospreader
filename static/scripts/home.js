@@ -193,7 +193,7 @@ function displayTargetPage(pdf, pageNum) {
 	pdf.getPage(pageNum).then(page => {
 
 		// Render thumbnail
-		renderPageToCanvas(page, "pdf-view", 300, false);
+		renderPageToCanvas(page, "pdf-view", 500, false);
 
 		// Render hidden full view
 		renderPageToCanvas(page, "image-full-view", 1536, true);
