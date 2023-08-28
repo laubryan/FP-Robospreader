@@ -59,32 +59,32 @@ function browseForFile() {
 			displayFilename(filename);
 
 			// DEBUG
-			switch (filename) {
-				case "407 International - March 31 2021.pdf":
-					renderDocument(fileURI, 2);
-					return;
-				case "Air Canada - December 31 2019.pdf":
-					renderDocument(fileURI, 10);
-					return;
-				case "BCE - Financial Report - 2020-2022.pdf":
-					renderDocument(fileURI, 83);
-					return;
-				case "Better Life Pharma Inc - Jan 31 Oct 31 2022.pdf":
-					renderDocument(fileURI, 3);
-					return;
-				case "NextGen Food Robotics Corp - 2022-04-30 - 2023-01-31..pdf":
-					renderDocument(fileURI, 3);
-					return;
-				case "Rogers - Q1-2020.pdf":
-					renderDocument(fileURI, 4);
-					return;
-				case "Starbucks - Annual Report - 2020.pdf":
-					renderDocument(fileURI, 54);
-					return;
-				case "Tesla - December 31 2020.pdf":
-					renderDocument(fileURI, 54);
-					return;
-			}
+			// switch (filename) {
+			// 	case "407 International - March 31 2021.pdf":
+			// 		renderDocument(fileURI, 2);
+			// 		return;
+			// 	case "Air Canada - December 31 2019.pdf":
+			// 		renderDocument(fileURI, 10);
+			// 		return;
+			// 	case "BCE - Financial Report - 2020-2022.pdf":
+			// 		renderDocument(fileURI, 83);
+			// 		return;
+			// 	case "Better Life Pharma Inc - Jan 31 Oct 31 2022.pdf":
+			// 		renderDocument(fileURI, 3);
+			// 		return;
+			// 	case "NextGen Food Robotics Corp - 2022-04-30 - 2023-01-31..pdf":
+			// 		renderDocument(fileURI, 3);
+			// 		return;
+			// 	case "Rogers - Q1-2020.pdf":
+			// 		renderDocument(fileURI, 4);
+			// 		return;
+			// 	case "Starbucks - Annual Report - 2020.pdf":
+			// 		renderDocument(fileURI, 54);
+			// 		return;
+			// 	case "Tesla - December 31 2020.pdf":
+			// 		renderDocument(fileURI, 54);
+			// 		return;
+			// }
 
 			// Render document
 			renderDocument(fileURI);
